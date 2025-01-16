@@ -331,14 +331,14 @@ import './App.css'
 //Page re-rendering：
 //我们想创建一个计数器，其值随着时间的推移或点击按钮而增加
 
+//   const Display = (props) => <div>{props.counter}</div>
+
 // const App = () => {
 //   const [counter, setCounter] = useState(0)
 
 //   const increaseByOne = () => setCounter(counter + 1)
 //   const decreaseByOne = () => setCounter(counter - 1)
 //   const reset = () => setCounter(0)
-
-//   const Display = ({ counter }) => <div>{counter}</div>
 
 //   const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
@@ -354,58 +354,105 @@ import './App.css'
 
 // ========================================
 
+// const History = (props) => {
+//   console.log('props value is', props)
+//   //History组件根据应用的状态渲染完全不同的React元素。这被称为条件渲染
+//   if (props.allClicks.length === 0) {
+//     return (
+//       <div>
+//         the app is used by pressing the buttons
+//       </div>
+//     )
+//   }
+//   return (
+//     <div>
+//       button press history: {props.allClicks.join(' ')}
+//     </div>
+//   )
+// }
 
-const History = (props) => {
-  console.log(props)
-  //History组件根据应用的状态渲染完全不同的React元素。这被称为条件渲染
-  if (props.allClicks.length === 0) {
-    return (
-      <div>
-        the app is used by pressing the buttons
-      </div>
-    )
-  }
-  return (
-    <div>
-      button press history: {props.allClicks.join(' ')}
-    </div>
-  )
-}
+// const Button = ({ onClick, text }) => (
+//   <button onClick={onClick}>
+//     {text}
+//   </button>
+// )
 
-const Button = ({ onClick, text }) => (
-  <button onClick={onClick}>
-    {text}
-  </button>
-)
+// const App = () => {
+//   const [left, setLeft] = useState(0)
+//   const [right, setRight] = useState(0)
+//   // 钩子只能从定义了React组件的函数体内部调用,不能从循环、条件表达式或任何不是定义组件的函数的地方调用
+//   // 这样做是为了确保钩子总是以相同的顺序被调用，如果不是这样的话，应用将表现得不正常
 
+//   //每一次点击都被存储在一个单独的状态中，名为allClicks，初始化为一个空数组
+//   const [allClicks, setAll] = useState([])
+
+//   const handleLeftClick = () => {
+//     setAll(allClicks.concat('L'))
+//     // 新的项目添加到数组中是通过concat方法完成的，
+//     // 该方法并不改变现有的数组，而是返回一个数组的新副本，并将项目添加到其中
+//     setLeft(left + 1)
+//   }
+
+//   const handleRightClick = () => {
+//     setAll(allClicks.concat('R'))
+//     setRight(right + 1)
+//   }
+
+//   return (
+//     <div>
+//       {left}
+//       <Button onClick={handleLeftClick} text='left' />
+//       <Button onClick={handleRightClick} text='right' />
+//       {right}
+//       <History allClicks={allClicks} />
+//     </div>
+//   )
+// }
+
+// ========================================
+
+// 一个事件处理程序不能是对一个函数的调用，它必须是一个函数或对一个函数的引用
+// const App = () => {
+//   const [value, setValue] = useState(10)
+
+//   const setToValue = (newValue) => {
+//     console.log('value now', newValue)
+//     setValue(newValue)
+//   }
+
+//   return (
+//     <div>
+//       {value}
+//       <button onClick={() => setToValue(1000)}>
+//         thousand
+//       </button>
+//       <button onClick={() => setToValue(0)}>
+//         reset
+//       </button>
+//       <button onClick={() => setToValue(value + 1)}>
+//         increment
+//       </button>
+//     </div>
+//   )
+// }
+
+// ========================================
+// Practice 1.6 - 1.14:
+//像大多数公司一样，Unicafe从其客户那里收集反馈。你的任务是实现一个收集客户反馈的网络应用。
+// 反馈只有三个选项。好，中立，和坏。
+//应用必须显示每个类别收集到的反馈的总数。
 const App = () => {
-  const [left, setLeft] = useState(0)
-  const [right, setRight] = useState(0)
-
-  //每一次点击都被存储在一个单独的状态中，名为allClicks，初始化为一个空数组
-  const [allClicks, setAll] = useState([])
-
-  const handleLeftClick = () => {
-    setAll(allClicks.concat('L'))
-    // 新的项目添加到数组中是通过concat方法完成的，
-    // 该方法并不改变现有的数组，而是返回一个数组的新副本，并将项目添加到其中
-    setLeft(left + 1)
-  }
-
-  const handleRightClick = () => {
-    setAll(allClicks.concat('R'))
-    setRight(right + 1)
-  }
+  // save clicks of each button to its own state
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
 
   return (
     <div>
-      {left}
-      <Button onClick={handleLeftClick} text='left'/>
-      <Button onClick={handleRightClick} text='right'/>
-      {right}
-      <History allClicks={allClicks} />
+      code here
     </div>
   )
 }
+
 
 export default App
