@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
+// import { useState } from 'react'
 
 // const App = () => {
 //   const now = new Date()
@@ -220,24 +221,24 @@ import './App.css'
 
 // ========================================
 
-const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
-      },
-      {
-        name: 'State of a component',
-        exercises: 14
-      }
-    ]
-  }
+// const App = () => {
+//   const course = {
+//     name: 'Half Stack application development',
+//     parts: [
+//       {
+//         name: 'Fundamentals of React',
+//         exercises: 10
+//       },
+//       {
+//         name: 'Using props to pass data',
+//         exercises: 7
+//       },
+//       {
+//         name: 'State of a component',
+//         exercises: 14
+//       }
+//     ]
+//   }
 
 // 在这里，props 是一个对象，包含了 course 属性：
 // props = {
@@ -251,41 +252,136 @@ const App = () => {
 //   }
 // }
 
-  const Header = (props) => {
-    return (
-      console.log(props),
-      <div>
-        {console.log(props.course.name)}
-        <h1>{props.course.name}</h1>
-      </div>
-    )
-  }
+// const Header = (props) => {
+//   return (
+//     console.log(props),
+//     <div>
+//       {console.log(props.course.name)}
+//       <h1>{props.course.name}</h1>
+//     </div>
+//   )
+// }
 
-  const Content = (props) => {
-    return (
-      <div>
-        {props.course.parts.map((part, index) => (
-          <p key={index}>
-            {part.name} {part.exercises}
-          </p>
-        ))}
-      </div>
-    )
-  }
+//   const Content = (props) => {
+//     return (
+//       <div>
+//         {props.course.parts.map((part, index) => (
+//           <p key={index}>
+//             {part.name} {part.exercises}
+//           </p>
+//         ))}
+//       </div>
+//     )
+//   }
 
-  const Total = (props) => {
-    return (
-      <p>
-        {props.course.parts.map(prop => prop.exercises).reduce((a, b) => a + b, 0)}
-      </p>
-    )
-  }
+//   const Total = (props) => {
+//     return (
+//       <p>
+//         {props.course.parts.map(prop => prop.exercises).reduce((a, b) => a + b, 0)}
+//       </p>
+//     )
+//   }
+
+//   return (
+//     <div>
+//       <Header course={course} />
+//       <Content course={course} />
+//       <Total course={course} />
+//     </div>
+//   )
+// }
+
+// ========================================
+
+// const Hello = ({ name, age }) => {// 解构赋值 终极
+//   // const name = props.name
+//   // const age = props.age
+//  // const { name, age } = props // 解构赋值
+
+//   // 在JavaScript中，在函数中定义函数是一种常规操作
+//   const bornYear = () => new Date().getFullYear() - age
+
+//   return (
+//     <div>
+//       <p>
+//         Hello {name}, you are {age} years old
+//       </p>
+//       {/* 这个人的年龄不需要作为参数传给函数，因为它可以直接访问传给组件的所有prop。 */}
+//       <p>So you were probably born in {bornYear()}</p>
+//     </div>
+//   )
+// }
+
+
+// const App = () => {
+//   const name = 'Peter'
+//   const age = 10
+
+//   return (
+//     <div>
+//       <h1>Greetings</h1>
+//       {/* <Hello name="Maya" age={26} /> */}
+//       <Hello name={name} age={age} />
+//     </div>
+//   )
+// }
+
+// ========================================
+
+//Page re-rendering：
+//我们想创建一个计数器，其值随着时间的推移或点击按钮而增加
+
+// const App = (props) => {
+//   const {counter} = props
+//   return (
+//     <div>{counter}</div>
+//   )
+// }
+
+
+
+
+const App = () => {
+  const [counter, setCounter] = useState(0)
+  // console.log(useState(0))
+  // console.log(counter)
+  // console.log(setCounter)
+
+  // setTimeout(
+  //   () => setCounter(counter + 1),
+  //   1000
+  // )
+
+  // console.log('rendering...', counter)
+
+  const increaseByOne = () => setCounter(counter + 1)
+  const decreaseByOne = () => setCounter(counter - 1)
+  const reset = () => setCounter(0)
+
+  // const Display = (props) => <div>{props.counter}</div>
+  const Display = ({ counter }) => <div>{counter}</div>
+
+  const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
   return (
     <div>
-      <Header course={course} />
-      <Content course={course} />
-      <Total course={course} />
+      {/* <div>{counter}</div> */}
+      <Display counter={counter} />
+
+      {/* <button onClick={() => setCounter(counter + 1)}> 
+      不建议这么写 , 把事件处理程序分成独立的函数*/}
+      {/* <button onClick={increaseByOne}>
+        add
+      </button>
+      <div>
+        <button onClick={reset}>
+          reset
+        </button>
+      </div> */}
+
+      <Button onClick={increaseByOne} text='plus' />
+      <Button onClick={decreaseByOne} text='minus' />
+      <Button onClick={reset} text='reset' />
     </div>
   )
 }
