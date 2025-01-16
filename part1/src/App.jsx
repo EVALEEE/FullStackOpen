@@ -331,57 +331,79 @@ import './App.css'
 //Page re-rendering：
 //我们想创建一个计数器，其值随着时间的推移或点击按钮而增加
 
-// const App = (props) => {
-//   const {counter} = props
+// const App = () => {
+//   const [counter, setCounter] = useState(0)
+
+//   const increaseByOne = () => setCounter(counter + 1)
+//   const decreaseByOne = () => setCounter(counter - 1)
+//   const reset = () => setCounter(0)
+
+//   const Display = ({ counter }) => <div>{counter}</div>
+
+//   const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
+
 //   return (
-//     <div>{counter}</div>
+//     <div>
+//       <Display counter={counter} />
+//       <Button onClick={increaseByOne} text='plus' />
+//       <Button onClick={decreaseByOne} text='minus' />
+//       <Button onClick={reset} text='reset' />
+//     </div>
 //   )
 // }
 
+// ========================================
 
 
+const History = (props) => {
+  console.log(props)
+  //History组件根据应用的状态渲染完全不同的React元素。这被称为条件渲染
+  if (props.allClicks.length === 0) {
+    return (
+      <div>
+        the app is used by pressing the buttons
+      </div>
+    )
+  }
+  return (
+    <div>
+      button press history: {props.allClicks.join(' ')}
+    </div>
+  )
+}
+
+const Button = ({ onClick, text }) => (
+  <button onClick={onClick}>
+    {text}
+  </button>
+)
 
 const App = () => {
-  const [counter, setCounter] = useState(0)
-  // console.log(useState(0))
-  // console.log(counter)
-  // console.log(setCounter)
+  const [left, setLeft] = useState(0)
+  const [right, setRight] = useState(0)
 
-  // setTimeout(
-  //   () => setCounter(counter + 1),
-  //   1000
-  // )
+  //每一次点击都被存储在一个单独的状态中，名为allClicks，初始化为一个空数组
+  const [allClicks, setAll] = useState([])
 
-  // console.log('rendering...', counter)
+  const handleLeftClick = () => {
+    setAll(allClicks.concat('L'))
+    // 新的项目添加到数组中是通过concat方法完成的，
+    // 该方法并不改变现有的数组，而是返回一个数组的新副本，并将项目添加到其中
+    setLeft(left + 1)
+  }
 
-  const increaseByOne = () => setCounter(counter + 1)
-  const decreaseByOne = () => setCounter(counter - 1)
-  const reset = () => setCounter(0)
-
-  // const Display = (props) => <div>{props.counter}</div>
-  const Display = ({ counter }) => <div>{counter}</div>
-
-  const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
+  const handleRightClick = () => {
+    setAll(allClicks.concat('R'))
+    setRight(right + 1)
+  }
 
   return (
     <div>
-      {/* <div>{counter}</div> */}
-      <Display counter={counter} />
-
-      {/* <button onClick={() => setCounter(counter + 1)}> 
-      不建议这么写 , 把事件处理程序分成独立的函数*/}
-      {/* <button onClick={increaseByOne}>
-        add
-      </button>
-      <div>
-        <button onClick={reset}>
-          reset
-        </button>
-      </div> */}
-
-      <Button onClick={increaseByOne} text='plus' />
-      <Button onClick={decreaseByOne} text='minus' />
-      <Button onClick={reset} text='reset' />
+      {left}
+      <Button onClick={handleLeftClick} text='left'/>
+      <Button onClick={handleRightClick} text='right'/>
+      {right}
+      <History allClicks={allClicks} />
     </div>
   )
 }
