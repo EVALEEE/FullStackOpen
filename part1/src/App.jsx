@@ -447,9 +447,44 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
+  const handleGoodClick = () => {
+    setGood(good + 1)
+  }
+
+  const handleNeutralClick = () => {
+    setNeutral(neutral + 1)
+  }
+
+  const handleBadClick = () => {
+    setBad(bad + 1)
+  }
+
+  const button = (handleClick, text) => {
+    return (
+      <button onClick={handleClick}>
+        {text}
+      </button>
+    )
+  }
+
+  //扩展你的应用，使其显示更多关于收集到的反馈的统计数据：收集到的反馈总数、平均分数（好：1，中性：0，坏：-1）和积极反馈的百分比。
   return (
     <div>
-      code here
+      <h1>Give Feedback</h1>
+      <div>
+        {button(handleGoodClick, 'good')}
+        {button(handleNeutralClick, 'neutral')}
+        {button(handleBadClick, 'bad')}
+      </div>
+      <h1>Statistics</h1>
+      <div>
+        <p>good {good}</p>
+        <p>neutral {neutral}</p>
+        <p>bad {bad}</p>
+        <p>all {good + neutral + bad}</p>
+        <p>average {(good - bad) / (good + neutral + bad)}</p>
+        <p>positive {good / (good + neutral + bad) * 100}%</p>
+      </div>
     </div>
   )
 }
