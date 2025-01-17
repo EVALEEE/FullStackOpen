@@ -11,9 +11,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -22,6 +24,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -34,9 +37,32 @@
 }
 
 .card {
+  margin-top: 25px;
   padding: 2em;
+  color: aquamarine;
+  background-color: rgba(0, 0, 0, 0.5); /* 卡片背景 */
+  border-radius: 8px; /* 边框圆角 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 阴影效果 */
 }
 
 .read-the-docs {
   color: #888;
+}
+
+div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+table {
+  margin-top: 10px;
+}
+
+.button-container {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  gap: 10px;
 }
