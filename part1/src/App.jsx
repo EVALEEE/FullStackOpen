@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
-// import Note from './components/Note.jsx'
+import Note from './components/Note.jsx'
 import Course from './components/Course.jsx'
+import PersonForm from './components/PersonForm.jsx'
+import Persons from './components/Persons.jsx'
+import SearchFilter from './components/SearchFilter.jsx'
 
 // import { useState } from 'react'
 
@@ -565,91 +568,233 @@ import Course from './components/Course.jsx'
 // ========================================
 
 //Exercises 2.1.-2.5
-const App = () => {
-  // const course = {
-  //   id: 1,
-  //   name: 'Half Stack application development',
-  //   parts: [
-  //     {
-  //       name: 'Fundamentals of React',
-  //       exercises: 10,
-  //       id: 1
-  //     },
-  //     {
-  //       name: 'Using props to pass data',
-  //       exercises: 7,
-  //       id: 2
-  //     },
-  //     {
-  //       name: 'State of a component',
-  //       exercises: 14,
-  //       id: 3
-  //     }
-  //   ]
-  // }
+// const App = () => {
+// const course = {
+//   id: 1,
+//   name: 'Half Stack application development',
+//   parts: [
+//     {
+//       name: 'Fundamentals of React',
+//       exercises: 10,
+//       id: 1
+//     },
+//     {
+//       name: 'Using props to pass data',
+//       exercises: 7,
+//       id: 2
+//     },
+//     {
+//       name: 'State of a component',
+//       exercises: 14,
+//       id: 3
+//     }
+//   ]
+// }
+//   const courses = [
+//     {
+//       name: 'Half Stack application development',
+//       id: 1,
+//       parts: [
+//         {
+//           name: 'Fundamentals of React',
+//           exercises: 10,
+//           id: 1
+//         },
+//         {
+//           name: 'Using props to pass data',
+//           exercises: 7,
+//           id: 2
+//         },
+//         {
+//           name: 'State of a component',
+//           exercises: 14,
+//           id: 3
+//         },
+//         {
+//           name: 'Redux',
+//           exercises: 11,
+//           id: 4
+//         }
+//       ]
+//     },
+//     {
+//       name: 'Node.js',
+//       id: 2,
+//       parts: [
+//         {
+//           name: 'Routing',
+//           exercises: 3,
+//           id: 1
+//         },
+//         {
+//           name: 'Middlewares',
+//           exercises: 7,
+//           id: 2
+//         }
+//       ]
+//     },
+//     {
+//       name: 'Express.js',
+//       id: 3,
+//       parts: [
+//         {
+//           name: 'Express.js',
+//           exercises: 3,
+//           id: 1
+//         },
+//         {
+//           name: 'Middlewares',
+//           exercises: 7,
+//           id: 2
+//         }
+//       ]
+//     }
+//   ]
+//   // 定义一个负责格式化单一课程的组件，称为Course
+//   return <Course courses={courses} />
+// }
 
-  const courses = [
-    {
-      name: 'Half Stack application development',
-      id: 1,
-      parts: [
-        {
-          name: 'Fundamentals of React',
-          exercises: 10,
-          id: 1
-        },
-        {
-          name: 'Using props to pass data',
-          exercises: 7,
-          id: 2
-        },
-        {
-          name: 'State of a component',
-          exercises: 14,
-          id: 3
-        },
-        {
-          name: 'Redux',
-          exercises: 11,
-          id: 4
-        }
-      ]
-    },
-    {
-      name: 'Node.js',
-      id: 2,
-      parts: [
-        {
-          name: 'Routing',
-          exercises: 3,
-          id: 1
-        },
-        {
-          name: 'Middlewares',
-          exercises: 7,
-          id: 2
-        }
-      ]
-    },
-    {
-      name: 'Express.js',
-      id: 3,
-      parts: [
-        {
-          name: 'Express.js',
-          exercises: 3,
-          id: 1
-        },
-        {
-          name: 'Middlewares',
-          exercises: 7,
-          id: 2
-        }
-      ]
+// ========================================
+
+//为了让我们的页面在添加新的笔记时得到更新，最好将笔记存储在App组件的状态中。
+//让我们导入useState函数，用它来定义一块状态，用prop中传递的初始笔记数组进行初始化。
+// const App = (props) => {
+//   const [notes, setNotes] = useState(props.notes)
+
+//   //添加一个新的状态，叫做newNote，用来存储用户提交的输入，让我们把它设置为input元素的value属性
+//   const [newNote, setNewNote] = useState(
+//     'a new note...'
+//   )
+
+//   const [showAll, setShowAll] = useState(true)//在App组件中添加一个状态，跟踪哪些笔记应该被显示
+
+// const addNote = (event) => {
+//   event.preventDefault()
+//   console.log('button clicked', event.target)
+//   const noteObject = {
+//     content: newNote,
+//     date: new Date().toISOString(),
+//     important: Math.random() < 0.5,//我们的笔记有50%的机会被标记为重要
+//     id: notes.length + 1,
+//   }
+
+//     setNotes(notes.concat(noteObject))//该方法并不改变原始的notes数组，而是创建一个新的数组副本，将新的项目添加到最后。这很重要，因为在React中我们必须永远不要直接改变状态!
+//     setNewNote('')//通过调用setNewNote状态的newNote函数来重设受控输入元素的值
+//   }
+
+//   //为了实现对输入元素的编辑，我们必须注册一个事件处理程序，使输入元素的变化与组件的状态同步。
+//   const handleNoteChange = (event) => {
+//     console.log(event.target.value)
+//     setNewNote(event.target.value)
+//     // 事件对象的target属性现在对应于被控制的input元素，而event.target.value指的是该元素的输入值。
+//   }
+
+//   const notesToShow = showAll
+//     ? notes
+//     : notes.filter(note => note.important === true)
+
+//   { console.log('notes', notes) }
+//   { console.log('notesToShow', notesToShow) }
+
+//   return (
+//     <div>
+//       <h1>Notes</h1>
+//       <div>
+//         <button onClick={() =>
+//           setShowAll(!showAll)}> show {showAll ? 'important' : 'all'}
+//         </button>
+//       </div>
+//       <ul>
+//         {notesToShow.map(note =>
+//           <Note key={note.id} note={note} />
+//         )}
+//       </ul>
+//       <form onSubmit={addNote}>
+//         <input value={newNote}
+//           onChange={handleNoteChange} />
+//         <button type="submit">save</button>
+//       </form>
+//     </div>
+//   )
+// }
+
+// ========================================
+
+//Exercises 2.6.-2.10
+//我们来创建一个简单的电话簿
+
+const App = () => {
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', number: '040-123456' },
+    { name: 'Ada Lovelace', number: '39-44-5323523' },
+    { name: 'Dan Abramov', number: '12-43-234345' },
+    { name: 'Mary Poppendieck', number: '39-23-6423122' }
+  ])
+
+  const [newName, setNewName] = useState('type a name...')
+  const [newNumber, setNewNumber] = useState('type a number...')
+  const [search, setSearch] = useState('')
+  const [result, setResult] = useState([])
+
+  const handleNoteChange = (event) => {
+    console.log(event.target.value)
+    setNewName(event.target.value)
+  }
+
+  const handleNumberChange = (event) => {
+    console.log(event.target.value)
+    setNewNumber(event.target.value)
+  }
+
+  const addPerson = (event) => {
+    event.preventDefault()
+    console.log('button clicked', event.target)
+    const personObject = {
+      name: newName,
+      id: persons.length + 1,
+      number: newNumber
     }
-  ]
-  // 定义一个负责格式化单一课程的组件，称为Course
-  return <Course courses={courses} />
+    if (persons.find(person => person.name === newName)) {
+      alert(`${newName} is already added to phonebook`)
+      setNewName('type a name...')
+      setNewNumber('type a number...')
+      return
+    }
+    setPersons(persons.concat(personObject))
+    setNewName('type a name...')
+    setNewNumber('type a number...')
+  }
+
+  const handleSearchChange = (event) => {
+    console.log(event.target.value)
+    setSearch(event.target.value)
+  }
+
+  const searchTarget = (event) => {
+    // 实现一个搜索字段，可以用来按名字过滤人的列表
+    event.preventDefault()
+    const searchResult = persons.filter(person =>
+      person.name.toLowerCase() === search.toLowerCase()
+    );
+    console.log('searchResult', searchResult)
+    setResult(searchResult)
+
+  }
+
+  return (
+    <div>
+      <h2>Phonebook</h2>
+      <SearchFilter searchTarget={searchTarget} search={search} setSearch={setSearch} setResult={setResult}
+        handleSearchChange={handleSearchChange} />
+      <h2>Add a New</h2>
+      <PersonForm addPerson={addPerson} newName={newName}
+        handleNoteChange={handleNoteChange} newNumber={newNumber}
+        handleNumberChange={handleNumberChange} />
+      <h2>Numbers</h2>
+      {/* 通过允许用户向电话簿中添加电话号码来扩展你的应用 */}
+      <Persons result={result} persons={persons} />
+    </div>
+  )
 }
 
 export default App
