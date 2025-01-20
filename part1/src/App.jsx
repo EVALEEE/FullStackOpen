@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
+// import Note from './components/Note.jsx'
+import Course from './components/Course.jsx'
+
 // import { useState } from 'react'
 
 // const App = () => {
@@ -442,120 +445,211 @@ import './App.css'
 // 反馈只有三个选项。好，中立，和坏。
 //应用必须显示每个类别收集到的反馈的总数。
 
-const Statistics = ({ good, bad, neutral }) => {
-  if (good === 0 && neutral === 0 && bad === 0) {
-    return (
-      <div>
-        <h1>Statistics</h1>
-        <p>No feedback given</p>
-      </div>
-    )
-  }
-  return (
-    <div>
-      <h1>Statistics</h1>
-      <div>
-        <table>
-          <tbody>
-            <StatisticLine text='good' value={good} />
-            <StatisticLine text='neutral' value={neutral} />
-            <StatisticLine text='bad' value={bad} />
-            <StatisticLine text='all' value={good + neutral + bad} />
-            <StatisticLine text='average' value={(good - bad) / (good + neutral + bad)} />
-            <StatisticLine text='positive' value={good / (good + neutral + bad) * 100 + '%'} />
-          </tbody>
-        </table>
-      </div>
-    </div>
-  )
-}
-const Button = ({ handleClick, text }) => (
-  <button onClick={handleClick}>
-    {text}
-  </button>
-)
+// const Statistics = ({ good, bad, neutral }) => {
+//   if (good === 0 && neutral === 0 && bad === 0) {
+//     return (
+//       <div>
+//         <h1>Statistics</h1>
+//         <p>No feedback given</p>
+//       </div>
+//     )
+//   }
+//   return (
+//     <div>
+//       <h1>Statistics</h1>
+//       <div>
+//         <table>
+//           <tbody>
+//             <StatisticLine text='good' value={good} />
+//             <StatisticLine text='neutral' value={neutral} />
+//             <StatisticLine text='bad' value={bad} />
+//             <StatisticLine text='all' value={good + neutral + bad} />
+//             <StatisticLine text='average' value={(good - bad) / (good + neutral + bad)} />
+//             <StatisticLine text='positive' value={good / (good + neutral + bad) * 100 + '%'} />
+//           </tbody>
+//         </table>
+//       </div>
+//     </div>
+//   )
+// }
+// const Button = ({ handleClick, text }) => (
+//   <button onClick={handleClick}>
+//     {text}
+//   </button>
+// )
 
-const StatisticLine = ({ text, value }) => {
-  return (
-    <tr>
-      <td>{text}</td>
-      <td>{value}</td>
-    </tr>
-  )
-}
+// const StatisticLine = ({ text, value }) => {
+//   return (
+//     <tr>
+//       <td>{text}</td>
+//       <td>{value}</td>
+//     </tr>
+//   )
+// }
 
+// const App = ({ notes }) => {
+//   // save clicks of each button to its own state
+//   const [good, setGood] = useState(0)
+//   const [neutral, setNeutral] = useState(0)
+//   const [bad, setBad] = useState(0)
+
+//   const anecdotes = [
+//     'If it hurts, do it more often',
+//     'Adding manpower to a late software project makes it later!',
+//     'The first 90 percent of the code accounts for the first 10 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+//     'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+//     'Premature optimization is the root of all evil.',
+//     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
+//     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients'
+//   ]
+
+//   const [selected, setSelected] = useState(0)
+//   const [counts, setCounts] = useState([0, 0, 0, 0, 0, 0, 0])
+//   console.log(counts)
+
+//   const handleGoodClick = () => {
+//     setGood(good + 1)
+//   }
+
+//   const handleNeutralClick = () => {
+//     setNeutral(neutral + 1)
+//   }
+
+//   const handleBadClick = () => {
+//     setBad(bad + 1)
+//   }
+
+//   //该按钮可以被点击来显示一个随机软件工程领域的名言警句
+//   const handleNextClick = () => {
+//     setSelected(Math.floor(Math.random() * anecdotes.length))
+//   }
+
+//   const handleVote = () => {
+//     const copy = [...counts]
+//     copy[selected] += 1
+//     setCounts(copy)
+//     console.log(counts)
+//   }
+
+//   //扩展你的应用，使其显示更多关于收集到的反馈的统计数据：收集到的反馈总数、平均分数（好：1，中性：0，坏：-1）和积极反馈的百分比。
+//   return (
+//     <div>
+//       <h1>Give Feedback</h1>
+//       <div className="button-container">
+//         <Button handleClick={handleGoodClick} text='good' />
+//         <Button handleClick={handleNeutralClick} text='neutral' />
+//         <Button handleClick={handleBadClick} text='bad' />
+//       </div>
+//       <div>
+//         <Statistics good={good} neutral={neutral} bad={bad} />
+//       </div>
+//       <div className='card'>
+//         "{anecdotes[selected]}"
+//       </div>
+//       <div>
+//         <p>has {counts[selected]} votes</p>
+//       </div>
+//       <div className="button-container">
+//         <Button handleClick={handleNextClick} text='anecdotes' />
+//         <Button handleClick={handleVote} text='vote' />
+//       </div>
+//       <div>
+//         {/* 显示拥有最大票数的名言警句 */}
+//         <h1>Anecdote with most votes</h1>
+//         <p>{anecdotes[counts.indexOf(Math.max(...counts))]}</p>
+//       </div>
+//     </div>
+//   )
+// }
+
+// ========================================
+
+//Exercises 2.1.-2.5
 const App = () => {
-  // save clicks of each button to its own state
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
+  // const course = {
+  //   id: 1,
+  //   name: 'Half Stack application development',
+  //   parts: [
+  //     {
+  //       name: 'Fundamentals of React',
+  //       exercises: 10,
+  //       id: 1
+  //     },
+  //     {
+  //       name: 'Using props to pass data',
+  //       exercises: 7,
+  //       id: 2
+  //     },
+  //     {
+  //       name: 'State of a component',
+  //       exercises: 14,
+  //       id: 3
+  //     }
+  //   ]
+  // }
 
-  const anecdotes = [
-    'If it hurts, do it more often',
-    'Adding manpower to a late software project makes it later!',
-    'The first 90 percent of the code accounts for the first 10 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
-    'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
-    'Premature optimization is the root of all evil.',
-    'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
-    'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients'
+  const courses = [
+    {
+      name: 'Half Stack application development',
+      id: 1,
+      parts: [
+        {
+          name: 'Fundamentals of React',
+          exercises: 10,
+          id: 1
+        },
+        {
+          name: 'Using props to pass data',
+          exercises: 7,
+          id: 2
+        },
+        {
+          name: 'State of a component',
+          exercises: 14,
+          id: 3
+        },
+        {
+          name: 'Redux',
+          exercises: 11,
+          id: 4
+        }
+      ]
+    },
+    {
+      name: 'Node.js',
+      id: 2,
+      parts: [
+        {
+          name: 'Routing',
+          exercises: 3,
+          id: 1
+        },
+        {
+          name: 'Middlewares',
+          exercises: 7,
+          id: 2
+        }
+      ]
+    },
+    {
+      name: 'Express.js',
+      id: 3,
+      parts: [
+        {
+          name: 'Express.js',
+          exercises: 3,
+          id: 1
+        },
+        {
+          name: 'Middlewares',
+          exercises: 7,
+          id: 2
+        }
+      ]
+    }
   ]
-
-  const [selected, setSelected] = useState(0)
-  const [counts, setCounts] = useState([0, 0, 0, 0, 0, 0, 0])
-
-  const handleGoodClick = () => {
-    setGood(good + 1)
-  }
-
-  const handleNeutralClick = () => {
-    setNeutral(neutral + 1)
-  }
-
-  const handleBadClick = () => {
-    setBad(bad + 1)
-  }
-
-  //该按钮可以被点击来显示一个随机软件工程领域的名言警句
-  const handleNextClick = () => {
-    setSelected(Math.floor(Math.random() * anecdotes.length))
-  }
-
-  const handleVote = () => {
-    const copy = [...counts]
-    copy[selected] += 1
-    setCounts(copy)
-    console.log(counts)
-  }
-
-  //扩展你的应用，使其显示更多关于收集到的反馈的统计数据：收集到的反馈总数、平均分数（好：1，中性：0，坏：-1）和积极反馈的百分比。
-  return (
-    <div>
-      <h1>Give Feedback</h1>
-      <div className="button-container">
-        <Button handleClick={handleGoodClick} text='good' />
-        <Button handleClick={handleNeutralClick} text='neutral' />
-        <Button handleClick={handleBadClick} text='bad' />
-      </div>
-      <div>
-        <Statistics good={good} neutral={neutral} bad={bad} />
-      </div>
-      <div className='card'>
-        "{anecdotes[selected]}"
-      </div>
-      <div>
-        <p>has {counts[selected]} votes</p>
-      </div>
-      <div className="button-container">
-        <Button handleClick={handleNextClick} text='anecdotes' />
-        <Button handleClick={handleVote} text='vote' />
-      </div>
-      <div>
-        {/* 显示拥有最大票数的名言警句 */}
-        <h1>Anecdote with most votes</h1>
-        <p>{anecdotes[counts.indexOf(Math.max(...counts))]}</p>
-      </div>
-    </div>
-  )
+  // 定义一个负责格式化单一课程的组件，称为Course
+  return <Course courses={courses} />
 }
 
 export default App
