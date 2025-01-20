@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
+import axios from 'axios'
 import Note from './components/Note.jsx'
 import Course from './components/Course.jsx'
 import PersonForm from './components/PersonForm.jsx'
@@ -661,140 +662,166 @@ import SearchFilter from './components/SearchFilter.jsx'
 // const App = (props) => {
 //   const [notes, setNotes] = useState(props.notes)
 
-//   //添加一个新的状态，叫做newNote，用来存储用户提交的输入，让我们把它设置为input元素的value属性
-//   const [newNote, setNewNote] = useState(
-//     'a new note...'
-//   )
+const App = () => {
+  const [notes, setNotes] = useState([])
+  //添加一个新的状态，叫做newNote，用来存储用户提交的输入，让我们把它设置为input元素的value属性
+  const [newNote, setNewNote] = useState(
+    'a new note...'
+  )
+  const [showAll, setShowAll] = useState(true)//在App组件中添加一个状态，跟踪哪些笔记应该被显示
 
-//   const [showAll, setShowAll] = useState(true)//在App组件中添加一个状态，跟踪哪些笔记应该被显示
 
-// const addNote = (event) => {
-//   event.preventDefault()
-//   console.log('button clicked', event.target)
-//   const noteObject = {
-//     content: newNote,
-//     date: new Date().toISOString(),
-//     important: Math.random() < 0.5,//我们的笔记有50%的机会被标记为重要
-//     id: notes.length + 1,
-//   }
 
-//     setNotes(notes.concat(noteObject))//该方法并不改变原始的notes数组，而是创建一个新的数组副本，将新的项目添加到最后。这很重要，因为在React中我们必须永远不要直接改变状态!
-//     setNewNote('')//通过调用setNewNote状态的newNote函数来重设受控输入元素的值
-//   }
+  //默认情况下，效果会在每次完成渲染后运行，但你可以选择只在某些值发生变化时启动它。
+  useEffect(() => {
+    // 该函数在渲染完组建之后运行
+    // 执行结果是effect被打印到控制台，命令axios.get开始从服务器获取数据，
+    // 并注册 response=> 函数作为该操作的event handler
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/notes')
+      .then(response => {
+        // 当数据从服务器到达时，JavaScript运行时调用注册为事件处理程序的函数，该函数将 promise 兑现打印到控制台，
+        // 并使用函数setNotes(response.data)将从服务器收到的注释存储到状态中。
+        console.log('promise fulfilled')
+        setNotes(response.data)
+      })
+  }, []) //useEffect的第二个参数用于指定效果的运行频率。如果第二个参数是一个空的数组[]，那么效果就只在组件的第一次渲染时运行。
+  // 定义该组件的函数主体被执行，该组件被首次渲染。在这一点上，render 0 notes被打印出来，意味着数据还没有从服务器上获取
+  // 对状态更新函数的调用会触发组件的重新渲染。结果，render 3 notes被打印到控制台，而从服务器上获取的笔记被渲染到屏幕上。
+  console.log('render', notes.length, 'notes')
 
-//   //为了实现对输入元素的编辑，我们必须注册一个事件处理程序，使输入元素的变化与组件的状态同步。
-//   const handleNoteChange = (event) => {
-//     console.log(event.target.value)
-//     setNewNote(event.target.value)
-//     // 事件对象的target属性现在对应于被控制的input元素，而event.target.value指的是该元素的输入值。
-//   }
 
-//   const notesToShow = showAll
-//     ? notes
-//     : notes.filter(note => note.important === true)
 
-//   { console.log('notes', notes) }
-//   { console.log('notesToShow', notesToShow) }
+  
 
-//   return (
-//     <div>
-//       <h1>Notes</h1>
-//       <div>
-//         <button onClick={() =>
-//           setShowAll(!showAll)}> show {showAll ? 'important' : 'all'}
-//         </button>
-//       </div>
-//       <ul>
-//         {notesToShow.map(note =>
-//           <Note key={note.id} note={note} />
-//         )}
-//       </ul>
-//       <form onSubmit={addNote}>
-//         <input value={newNote}
-//           onChange={handleNoteChange} />
-//         <button type="submit">save</button>
-//       </form>
-//     </div>
-//   )
-// }
+const addNote = (event) => {
+  event.preventDefault()
+  console.log('button clicked', event.target)
+  const noteObject = {
+    content: newNote,
+    date: new Date().toISOString(),
+    important: Math.random() < 0.5,//我们的笔记有50%的机会被标记为重要
+    id: notes.length + 1,
+  }
+
+    setNotes(notes.concat(noteObject))//该方法并不改变原始的notes数组，而是创建一个新的数组副本，将新的项目添加到最后。这很重要，因为在React中我们必须永远不要直接改变状态!
+    setNewNote('')//通过调用setNewNote状态的newNote函数来重设受控输入元素的值
+  }
+
+  //为了实现对输入元素的编辑，我们必须注册一个事件处理程序，使输入元素的变化与组件的状态同步。
+  const handleNoteChange = (event) => {
+    console.log(event.target.value)
+    setNewNote(event.target.value)
+    // 事件对象的target属性现在对应于被控制的input元素，而event.target.value指的是该元素的输入值。
+  }
+
+  const notesToShow = showAll
+    ? notes
+    : notes.filter(note => note.important === true)
+
+  { console.log('notes', notes) }
+  { console.log('notesToShow', notesToShow) }
+
+  return (
+    <div>
+      <h1>Notes</h1>
+      <div>
+        <button onClick={() =>
+          setShowAll(!showAll)}> show {showAll ? 'important' : 'all'}
+        </button>
+      </div>
+      <ul>
+        {notesToShow.map(note =>
+          <Note key={note.id} note={note} />
+        )}
+      </ul>
+      <form onSubmit={addNote}>
+        <input value={newNote}
+          onChange={handleNoteChange} />
+        <button type="submit">save</button>
+      </form>
+    </div>
+  )
+}
 
 // ========================================
 
 //Exercises 2.6.-2.10
 //我们来创建一个简单的电话簿
 
-const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ])
+// const App = () => {
+//   const [persons, setPersons] = useState([
+//     { name: 'Arto Hellas', number: '040-123456' },
+//     { name: 'Ada Lovelace', number: '39-44-5323523' },
+//     { name: 'Dan Abramov', number: '12-43-234345' },
+//     { name: 'Mary Poppendieck', number: '39-23-6423122' }
+//   ])
 
-  const [newName, setNewName] = useState('type a name...')
-  const [newNumber, setNewNumber] = useState('type a number...')
-  const [search, setSearch] = useState('')
-  const [result, setResult] = useState([])
+//   const [newName, setNewName] = useState('type a name...')
+//   const [newNumber, setNewNumber] = useState('type a number...')
+//   const [search, setSearch] = useState('')
+//   const [result, setResult] = useState([])
 
-  const handleNoteChange = (event) => {
-    console.log(event.target.value)
-    setNewName(event.target.value)
-  }
+//   const handleNoteChange = (event) => {
+//     console.log(event.target.value)
+//     setNewName(event.target.value)
+//   }
 
-  const handleNumberChange = (event) => {
-    console.log(event.target.value)
-    setNewNumber(event.target.value)
-  }
+//   const handleNumberChange = (event) => {
+//     console.log(event.target.value)
+//     setNewNumber(event.target.value)
+//   }
 
-  const addPerson = (event) => {
-    event.preventDefault()
-    console.log('button clicked', event.target)
-    const personObject = {
-      name: newName,
-      id: persons.length + 1,
-      number: newNumber
-    }
-    if (persons.find(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
-      setNewName('type a name...')
-      setNewNumber('type a number...')
-      return
-    }
-    setPersons(persons.concat(personObject))
-    setNewName('type a name...')
-    setNewNumber('type a number...')
-  }
+//   const addPerson = (event) => {
+//     event.preventDefault()
+//     console.log('button clicked', event.target)
+//     const personObject = {
+//       name: newName,
+//       id: persons.length + 1,
+//       number: newNumber
+//     }
+//     if (persons.find(person => person.name === newName)) {
+//       alert(`${newName} is already added to phonebook`)
+//       setNewName('type a name...')
+//       setNewNumber('type a number...')
+//       return
+//     }
+//     setPersons(persons.concat(personObject))
+//     setNewName('type a name...')
+//     setNewNumber('type a number...')
+//   }
 
-  const handleSearchChange = (event) => {
-    console.log(event.target.value)
-    setSearch(event.target.value)
-  }
+//   const handleSearchChange = (event) => {
+//     console.log(event.target.value)
+//     setSearch(event.target.value)
+//   }
 
-  const searchTarget = (event) => {
-    // 实现一个搜索字段，可以用来按名字过滤人的列表
-    event.preventDefault()
-    const searchResult = persons.filter(person =>
-      person.name.toLowerCase() === search.toLowerCase()
-    );
-    console.log('searchResult', searchResult)
-    setResult(searchResult)
+//   const searchTarget = (event) => {
+//     // 实现一个搜索字段，可以用来按名字过滤人的列表
+//     event.preventDefault()
+//     const searchResult = persons.filter(person =>
+//       person.name.toLowerCase() === search.toLowerCase()
+//     );
+//     console.log('searchResult', searchResult)
+//     setResult(searchResult)
 
-  }
+//   }
 
-  return (
-    <div>
-      <h2>Phonebook</h2>
-      <SearchFilter searchTarget={searchTarget} search={search} setSearch={setSearch} setResult={setResult}
-        handleSearchChange={handleSearchChange} />
-      <h2>Add a New</h2>
-      <PersonForm addPerson={addPerson} newName={newName}
-        handleNoteChange={handleNoteChange} newNumber={newNumber}
-        handleNumberChange={handleNumberChange} />
-      <h2>Numbers</h2>
-      {/* 通过允许用户向电话簿中添加电话号码来扩展你的应用 */}
-      <Persons result={result} persons={persons} />
-    </div>
-  )
-}
+//   return (
+//     <div>
+//       <h2>Phonebook</h2>
+//       <SearchFilter searchTarget={searchTarget} search={search} setSearch={setSearch} setResult={setResult}
+//         handleSearchChange={handleSearchChange} />
+//       <h2>Add a New</h2>
+//       <PersonForm addPerson={addPerson} newName={newName}
+//         handleNoteChange={handleNoteChange} newNumber={newNumber}
+//         handleNumberChange={handleNumberChange} />
+//       <h2>Numbers</h2>
+//       {/* 通过允许用户向电话簿中添加电话号码来扩展你的应用 */}
+//       <Persons result={result} persons={persons} />
+//     </div>
+//   )
+// }
 
 export default App
