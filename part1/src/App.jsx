@@ -737,8 +737,8 @@ const App = () => {
   const toggleImportanceOf = (id) => {
     // const url = `http://localhost:3001/notes/${id}`
     const note = notes.find(n => n.id === id)
-    console.log(id)
-    console.log(note)
+    // console.log(id)
+    // console.log(note)
     const changedNote = { ...note, important: !note.important }//旧笔记的完全拷贝
     //{ ...note }创建了一个新的对象，并复制了note对象的所有属性, 同时新对象的important属性到了它在原始对象中先前值的否定
 
@@ -746,6 +746,13 @@ const App = () => {
       .update(id, changedNote)
       .then(returnedNote => {
         setNotes(notes.map(note => note.id !== id ? note : returnedNote))
+      })
+      //注册一个错误处理程序,如果请求失败，与catch方法注册的事件处理程序被调用
+      .catch(error => {
+        alert(
+          `the note '${note.content}' was already deleted from server`
+        )
+        setNotes(notes.filter(n => n.id != id))//删除的笔记会从状态中被过滤掉
       })
 
 
