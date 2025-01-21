@@ -6,6 +6,7 @@ import Course from './components/Course.jsx'
 import PersonForm from './components/PersonForm.jsx'
 import Persons from './components/Persons.jsx'
 import SearchFilter from './components/SearchFilter.jsx'
+import noteService from './services/notes'
 
 // import { useState } from 'react'
 
@@ -671,7 +672,6 @@ const App = () => {
   const [showAll, setShowAll] = useState(true)//在App组件中添加一个状态，跟踪哪些笔记应该被显示
 
 
-
   //默认情况下，效果会在每次完成渲染后运行，但你可以选择只在某些值发生变化时启动它。
   useEffect(() => {
     // 该函数在渲染完组建之后运行
@@ -697,18 +697,26 @@ const App = () => {
     const noteObject = {
       content: newNote,
       date: new Date().toISOString(),
-      important: Math.random() < 0.5,//我们的笔记有50%的机会被标记为重要
+      // important: Math.random() < 0.5//我们的笔记有50%的机会被标记为重要
+      important: false//我们的笔记有50%的机会被标记为重要
       // id: notes.length + 1 //我们为注释创建一个新的对象，但省略了id属性，因为最好让服务器为我们的资源生成id!
     }
 
-    axios
-      .post('http://localhost:3001/notes', noteObject)
-      .then(response => {
-        console.log(response)
-        setNotes(notes.concat(response.data))
-        //该方法并不改变原始的notes数组，而是创建一个新的数组副本，将新的项目添加到最后。
-        //这很重要，因为在React中我们必须永远不要直接改变状态!
-        setNewNote('')//通过调用setNewNote状态的newNote函数来重设受控输入元素的值
+    // axios
+    //   .post('http://localhost:3001/notes', noteObject)
+    //   .then(response => {
+    //     console.log(response)
+    //     setNotes(notes.concat(response.data))
+    //     //该方法并不改变原始的notes数组，而是创建一个新的数组副本，将新的项目添加到最后。
+    //     //这很重要，因为在React中我们必须永远不要直接改变状态!
+    //     setNewNote('')//通过调用setNewNote状态的newNote函数来重设受控输入元素的值
+    //   })
+
+    noteService
+      .create(noteObject)
+      .then(returnedNote => {
+        setNotes(notes.concat(returnedNote))
+        setNewNote('')
       })
   }
 
@@ -727,20 +735,27 @@ const App = () => {
   { console.log('notesToShow', notesToShow) }
 
   const toggleImportanceOf = (id) => {
-    const url = `http://localhost:3001/notes/${id}`
+    // const url = `http://localhost:3001/notes/${id}`
     const note = notes.find(n => n.id === id)
     console.log(id)
     console.log(note)
     const changedNote = { ...note, important: !note.important }//旧笔记的完全拷贝
     //{ ...note }创建了一个新的对象，并复制了note对象的所有属性, 同时新对象的important属性到了它在原始对象中先前值的否定
 
+    noteService
+      .update(id, changedNote)
+      .then(returnedNote => {
+        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
+      })
+
+
     //新的note会以PUT请求的方式发送到后端，在那里它将取代旧的对象
-    axios.put(url, changedNote).then(response => {
-      setNotes(notes.map(note => note.id !== id ? note : response.data))
-      //回调函数将组件的notes状态设置为一个新的数组，该数组包含了之前notes数组中的所有项目，除了旧的笔记，它被服务器返回的更新版本所取代。
-      //map方法通过将旧数组中的每个项目映射到新数组中的一个项目来创建一个新数组
-      // 如果note.id !== id为真，我们就把旧数组中的项目复制到新数组中。如果条件是假的，那么由服务器返回的笔记对象就会被添加到数组中
-    })
+    // axios.put(url, changedNote).then(response => {
+    //   setNotes(notes.map(note => note.id !== id ? note : response.data))
+    //   //回调函数将组件的notes状态设置为一个新的数组，该数组包含了之前notes数组中的所有项目，除了旧的笔记，它被服务器返回的更新版本所取代。
+    //   //map方法通过将旧数组中的每个项目映射到新数组中的一个项目来创建一个新数组
+    //   // 如果note.id !== id为真，我们就把旧数组中的项目复制到新数组中。如果条件是假的，那么由服务器返回的笔记对象就会被添加到数组中
+    // })
 
     console.log(`importance of ${id} needs to be toggled`)
   }
