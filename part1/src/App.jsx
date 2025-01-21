@@ -657,93 +657,96 @@ import SearchFilter from './components/SearchFilter.jsx'
 
 // ========================================
 
-// //为了让我们的页面在添加新的笔记时得到更新，最好将笔记存储在App组件的状态中。
-// //让我们导入useState函数，用它来定义一块状态，用prop中传递的初始笔记数组进行初始化。
-// // const App = (props) => {
-// //   const [notes, setNotes] = useState(props.notes)
+//为了让我们的页面在添加新的笔记时得到更新，最好将笔记存储在App组件的状态中。
+//让我们导入useState函数，用它来定义一块状态，用prop中传递的初始笔记数组进行初始化。
+// const App = (props) => {
+//   const [notes, setNotes] = useState(props.notes)
 
-// const App = () => {
-//   const [notes, setNotes] = useState([])
-//   //添加一个新的状态，叫做newNote，用来存储用户提交的输入，让我们把它设置为input元素的value属性
-//   const [newNote, setNewNote] = useState(
-//     'a new note...'
-//   )
-//   const [showAll, setShowAll] = useState(true)//在App组件中添加一个状态，跟踪哪些笔记应该被显示
-
-
-
-//   //默认情况下，效果会在每次完成渲染后运行，但你可以选择只在某些值发生变化时启动它。
-//   useEffect(() => {
-//     // 该函数在渲染完组建之后运行
-//     // 执行结果是effect被打印到控制台，命令axios.get开始从服务器获取数据，
-//     // 并注册 response=> 函数作为该操作的event handler
-//     console.log('effect')
-//     axios
-//       .get('http://localhost:3001/notes')
-//       .then(response => {
-//         // 当数据从服务器到达时，JavaScript运行时调用注册为事件处理程序的函数，该函数将 promise 兑现打印到控制台，
-//         // 并使用函数setNotes(response.data)将从服务器收到的注释存储到状态中。
-//         console.log('promise fulfilled')
-//         setNotes(response.data)
-//       })
-//   }, []) //useEffect的第二个参数用于指定效果的运行频率。如果第二个参数是一个空的数组[]，那么效果就只在组件的第一次渲染时运行。
-//   // 定义该组件的函数主体被执行，该组件被首次渲染。在这一点上，render 0 notes被打印出来，意味着数据还没有从服务器上获取
-//   // 对状态更新函数的调用会触发组件的重新渲染。结果，render 3 notes被打印到控制台，而从服务器上获取的笔记被渲染到屏幕上。
-//   console.log('render', notes.length, 'notes')
+const App = () => {
+  const [notes, setNotes] = useState([])
+  //添加一个新的状态，叫做newNote，用来存储用户提交的输入，让我们把它设置为input元素的value属性
+  const [newNote, setNewNote] = useState(
+    'a new note...'
+  )
+  const [showAll, setShowAll] = useState(true)//在App组件中添加一个状态，跟踪哪些笔记应该被显示
 
 
 
+  //默认情况下，效果会在每次完成渲染后运行，但你可以选择只在某些值发生变化时启动它。
+  useEffect(() => {
+    // 该函数在渲染完组建之后运行
+    // 执行结果是effect被打印到控制台，命令axios.get开始从服务器获取数据，
+    // 并注册 response=> 函数作为该操作的event handler
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/notes')
+      .then(response => {
+        // 当数据从服务器到达时，JavaScript运行时调用注册为事件处理程序的函数，该函数将 promise 兑现打印到控制台，
+        // 并使用函数setNotes(response.data)将从服务器收到的注释存储到状态中。
+        console.log('promise fulfilled')
+        setNotes(response.data)
+      })
+  }, []) //useEffect的第二个参数用于指定效果的运行频率。如果第二个参数是一个空的数组[]，那么效果就只在组件的第一次渲染时运行。
+  // 定义该组件的函数主体被执行，该组件被首次渲染。在这一点上，render 0 notes被打印出来，意味着数据还没有从服务器上获取
+  // 对状态更新函数的调用会触发组件的重新渲染。结果，render 3 notes被打印到控制台，而从服务器上获取的笔记被渲染到屏幕上。
+  console.log('render', notes.length, 'notes')
 
 
-// const addNote = (event) => {
-//   event.preventDefault()
-//   console.log('button clicked', event.target)
-//   const noteObject = {
-//     content: newNote,
-//     date: new Date().toISOString(),
-//     important: Math.random() < 0.5,//我们的笔记有50%的机会被标记为重要
-//     id: notes.length + 1,
-//   }
+  const addNote = (event) => {
+    event.preventDefault()
+    const noteObject = {
+      content: newNote,
+      date: new Date().toISOString(),
+      important: Math.random() < 0.5,//我们的笔记有50%的机会被标记为重要
+      // id: notes.length + 1 //我们为注释创建一个新的对象，但省略了id属性，因为最好让服务器为我们的资源生成id!
+    }
 
-//     setNotes(notes.concat(noteObject))//该方法并不改变原始的notes数组，而是创建一个新的数组副本，将新的项目添加到最后。这很重要，因为在React中我们必须永远不要直接改变状态!
-//     setNewNote('')//通过调用setNewNote状态的newNote函数来重设受控输入元素的值
-//   }
+    axios
+      .post('http://localhost:3001/notes', noteObject)
+      .then(response => {
+        console.log(response)
+        setNotes(notes.concat(response.data))
+        //该方法并不改变原始的notes数组，而是创建一个新的数组副本，将新的项目添加到最后。
+        //这很重要，因为在React中我们必须永远不要直接改变状态!
+        setNewNote('')//通过调用setNewNote状态的newNote函数来重设受控输入元素的值
+      })
+  }
 
-//   //为了实现对输入元素的编辑，我们必须注册一个事件处理程序，使输入元素的变化与组件的状态同步。
-//   const handleNoteChange = (event) => {
-//     console.log(event.target.value)
-//     setNewNote(event.target.value)
-//     // 事件对象的target属性现在对应于被控制的input元素，而event.target.value指的是该元素的输入值。
-//   }
+  //为了实现对输入元素的编辑，我们必须注册一个事件处理程序，使输入元素的变化与组件的状态同步。
+  const handleNoteChange = (event) => {
+    console.log(event.target.value)
+    setNewNote(event.target.value)
+    // 事件对象的target属性现在对应于被控制的input元素，而event.target.value指的是该元素的输入值。
+  }
 
-//   const notesToShow = showAll
-//     ? notes
-//     : notes.filter(note => note.important === true)
+  const notesToShow = showAll
+    ? notes
+    : notes.filter(note => note.important === true)
 
-//   { console.log('notes', notes) }
-//   { console.log('notesToShow', notesToShow) }
+  { console.log('notes', notes) }
+  { console.log('notesToShow', notesToShow) }
 
-//   return (
-//     <div>
-//       <h1>Notes</h1>
-//       <div>
-//         <button onClick={() =>
-//           setShowAll(!showAll)}> show {showAll ? 'important' : 'all'}
-//         </button>
-//       </div>
-//       <ul>
-//         {notesToShow.map(note =>
-//           <Note key={note.id} note={note} />
-//         )}
-//       </ul>
-//       <form onSubmit={addNote}>
-//         <input value={newNote}
-//           onChange={handleNoteChange} />
-//         <button type="submit">save</button>
-//       </form>
-//     </div>
-//   )
-// }
+  return (
+    <div>
+      <h1>Notes</h1>
+      <div>
+        <button onClick={() =>
+          setShowAll(!showAll)}> show {showAll ? 'important' : 'all'}
+        </button>
+      </div>
+      <ul>
+        {notesToShow.map(note =>
+          <Note key={note.id} note={note} />
+        )}
+      </ul>
+      <form onSubmit={addNote}>
+        <input value={newNote}
+          onChange={handleNoteChange} />
+        <button type="submit">save</button>
+      </form>
+    </div>
+  )
+}
 
 // ========================================
 
@@ -843,117 +846,117 @@ import SearchFilter from './components/SearchFilter.jsx'
 // 用户界面非常简单。要显示的国家是通过在搜索栏里输入一个搜索查询来找到的。
 
 // 如果有太多(超过10个)国家符合查询条件，则会提示用户使他们的查询更具体。
-const App = () => {
-  const [country, setCountry] = useState([])
-  const [newName, setNewName] = useState('')
-  const [result, setResult] = useState([])
-  const [weather, setWeather] = useState([])
+// const App = () => {
+//   const [country, setCountry] = useState([])
+//   const [newName, setNewName] = useState('')
+//   const [result, setResult] = useState([])
+//   const [weather, setWeather] = useState([])
 
-  //从服务器获取国家数据
-  useEffect(() => {
-    // console.log('effect')
-    axios
-      .get('https://restcountries.com/v3.1/all')
-      .then(response => {
-        console.log('promise fulfilled')
-        setCountry(response.data)
-      })
-  }, [])
+//   //从服务器获取国家数据
+//   useEffect(() => {
+//     // console.log('effect')
+//     axios
+//       .get('https://restcountries.com/v3.1/all')
+//       .then(response => {
+//         console.log('promise fulfilled')
+//         setCountry(response.data)
+//       })
+//   }, [])
 
-  const handleChange = (event) => {
-    setNewName(event.target.value)
-  }
+//   const handleChange = (event) => {
+//     setNewName(event.target.value)
+//   }
 
-  const searchTarget = (event) => {
-    event.preventDefault()
-    const searchResult = country.filter(country =>
-      country.name.common.toLowerCase().includes(newName.toLowerCase())
-    );
-    console.log('searchResult', searchResult)
-    setResult(searchResult)
-    searchResult.forEach(country => {
-      if (country.capitalInfo && country.capitalInfo.latlng
-        && country.capitalInfo.latlng.length === 2) {
-          console.log(country)
-        const [lat, lon] = country.capitalInfo.latlng;
-        getWeather(lat, lon, country.cca3);
-      }
-    });
-  }
+//   const searchTarget = (event) => {
+//     event.preventDefault()
+//     const searchResult = country.filter(country =>
+//       country.name.common.toLowerCase().includes(newName.toLowerCase())
+//     );
+//     console.log('searchResult', searchResult)
+//     setResult(searchResult)
+//     searchResult.forEach(country => {
+//       if (country.capitalInfo && country.capitalInfo.latlng
+//         && country.capitalInfo.latlng.length === 2) {
+//           console.log(country)
+//         const [lat, lon] = country.capitalInfo.latlng;
+//         getWeather(lat, lon, country.cca3);
+//       }
+//     });
+//   }
 
-  const getWeather = (lat, lon, countryCode) => {
-    const apiKey = import.meta.env.VITE_API_KEY
-    // variable api_key has now the value set in startup
-    // const apiKey = 'b939ddee5c336455491661e92b1aace4'; // Replace with your OpenWeatherMap API key
-    axios
-    .get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`)
-    .then(response => {
-      setWeather(prevWeather => {
-        const updatedWeather = {
-          ...prevWeather,
-          [countryCode]: response.data
-        };
-        console.log(updatedWeather); // Print updated weather here
-        return updatedWeather;
-      });
-    });
-  }
+//   const getWeather = (lat, lon, countryCode) => {
+//     const apiKey = import.meta.env.VITE_API_KEY
+//     // variable api_key has now the value set in startup
+//     // const apiKey = 'b939ddee5c336455491661e92b1aace4'; // Replace with your OpenWeatherMap API key
+//     axios
+//     .get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`)
+//     .then(response => {
+//       setWeather(prevWeather => {
+//         const updatedWeather = {
+//           ...prevWeather,
+//           [countryCode]: response.data
+//         };
+//         console.log(updatedWeather); // Print updated weather here
+//         return updatedWeather;
+//       });
+//     });
+//   }
 
-  const processResult = (result) => {
-    if (result.length > 10) {
-      return 'Too many matches, specify another filter'
-    }
-    if (result.length === 1) {
-      return result.map(country => (
-        <div key={country.cca3}>
-          <h2>{country.name.common}</h2>
-          <p>capital {country.capital[0]}</p>
-          <p>population {country.population}</p>
-          <h3>languages</h3>
-          <ul>
-            {Object.values(country.languages).map((language, index) => (
-              <li key={index}>{language}</li>
-            ))}
-          </ul>
-          <img src={country.flags.png} alt={country.name.common} width="200" height="100" />
-          {weather[country.cca3] && (
-            <div>
-              <h3>Weather in {country.capital}</h3>
-              <p>Temperature: {weather[country.cca3].main.temp} K</p>
-              <p>Weather: {weather[country.cca3].weather[0].description}</p>
-              <img
-                src={`https://openweathermap.org/img/wn/${weather[country.cca3].weather[0].icon}@2x.png`}
-                alt="Weather icon"
-              />
-            </div>
-          )}
-        </div>
-      ))
-    }
-    return result.map(country => (
-      <div key={country.cca3}>
-        <p>{country.name.common}
-          <button onClick={() => {
-            setResult([country])
-          }}>show</button>
-        </p>
-      </div>
-    ))
-  }
+//   const processResult = (result) => {
+//     if (result.length > 10) {
+//       return 'Too many matches, specify another filter'
+//     }
+//     if (result.length === 1) {
+//       return result.map(country => (
+//         <div key={country.cca3}>
+//           <h2>{country.name.common}</h2>
+//           <p>capital {country.capital[0]}</p>
+//           <p>population {country.population}</p>
+//           <h3>languages</h3>
+//           <ul>
+//             {Object.values(country.languages).map((language, index) => (
+//               <li key={index}>{language}</li>
+//             ))}
+//           </ul>
+//           <img src={country.flags.png} alt={country.name.common} width="200" height="100" />
+//           {weather[country.cca3] && (
+//             <div>
+//               <h3>Weather in {country.capital}</h3>
+//               <p>Temperature: {weather[country.cca3].main.temp} K</p>
+//               <p>Weather: {weather[country.cca3].weather[0].description}</p>
+//               <img
+//                 src={`https://openweathermap.org/img/wn/${weather[country.cca3].weather[0].icon}@2x.png`}
+//                 alt="Weather icon"
+//               />
+//             </div>
+//           )}
+//         </div>
+//       ))
+//     }
+//     return result.map(country => (
+//       <div key={country.cca3}>
+//         <p>{country.name.common}
+//           <button onClick={() => {
+//             setResult([country])
+//           }}>show</button>
+//         </p>
+//       </div>
+//     ))
+//   }
 
-  return (
-    <div>
-      <form onSubmit={searchTarget}>
-        <div>
-          find countries: <input value={newName} onChange={handleChange} />
-        </div>
-        <div>
-          <button type="submit">search</button>
-        </div>
-      </form>
-      <div>{processResult(result)}</div>
-    </div>
-  )
-}
+//   return (
+//     <div>
+//       <form onSubmit={searchTarget}>
+//         <div>
+//           find countries: <input value={newName} onChange={handleChange} />
+//         </div>
+//         <div>
+//           <button type="submit">search</button>
+//         </div>
+//       </form>
+//       <div>{processResult(result)}</div>
+//     </div>
+//   )
+// }
 
 export default App

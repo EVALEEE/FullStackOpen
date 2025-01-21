@@ -1,5 +1,5 @@
 {
-  "persons":[
+  "persons": [
     {
       "name": "Arto Hellas",
       "number": "040-123456",
@@ -19,6 +19,92 @@
       "name": "Mary Poppendieck",
       "number": "39-23-6423122",
       "id": 4
+    }
+  ],
+  "notes": [
+    {
+      "content": "Note 1",
+      "date": "2023-10-01T12:00:00.000Z",
+      "important": true,
+      "id": 1
+    },
+    {
+      "content": "Note 2",
+      "date": "2023-10-02T12:00:00.000Z",
+      "important": false,
+      "id": 2
+    },
+    {
+      "content": "Note 3",
+      "date": "2023-10-03T12:00:00.000Z",
+      "important": true,
+      "id": 3
+    },
+    {
+      "content": "Note 4",
+      "date": "2023-10-04T12:00:00.000Z",
+      "important": false,
+      "id": 4
+    },
+    {
+      "content": "Note 5",
+      "date": "2023-10-05T12:00:00.000Z",
+      "important": true,
+      "id": 5
+    },
+    {
+      "content": "Note 6",
+      "date": "2023-10-06T12:00:00.000Z",
+      "important": false,
+      "id": 6
+    },
+    {
+      "content": "Note 7",
+      "date": "2023-10-07T12:00:00.000Z",
+      "important": true,
+      "id": 7
+    },
+    {
+      "id": "6837",
+      "content": "a new note...",
+      "date": "2025-01-21T09:20:39.563Z",
+      "important": true
+    },
+    {
+      "id": "bd6d",
+      "content": "eva lee is cool!",
+      "date": "2025-01-21T09:22:03.070Z",
+      "important": true
+    },
+    {
+      "id": "d2f5",
+      "content": "wtf",
+      "date": "2025-01-21T09:22:16.654Z",
+      "important": true
+    },
+    {
+      "id": "bcd0",
+      "content": "a new note...",
+      "date": "2025-01-21T09:26:21.099Z",
+      "important": true
+    },
+    {
+      "id": "fd06",
+      "content": "???",
+      "date": "2025-01-21T09:31:07.902Z",
+      "important": true
+    },
+    {
+      "id": "93c4",
+      "content": "a new note...90",
+      "date": "2025-01-21T09:31:38.850Z",
+      "important": false
+    },
+    {
+      "id": "5c4d",
+      "content": "en",
+      "date": "2025-01-21T09:34:21.246Z",
+      "important": false
     }
   ]
 }
