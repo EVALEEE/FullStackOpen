@@ -847,10 +847,11 @@ const App = () => {
   const [country, setCountry] = useState([])
   const [newName, setNewName] = useState('')
   const [result, setResult] = useState([])
+  const [weather, setWeather] = useState([])
 
-  //从服务器获取数据
+  //从服务器获取国家数据
   useEffect(() => {
-    console.log('effect')
+    // console.log('effect')
     axios
       .get('https://restcountries.com/v3.1/all')
       .then(response => {
@@ -858,8 +859,6 @@ const App = () => {
         setCountry(response.data)
       })
   }, [])
-  console.log('render', country.length, 'countries')
-  console.log('render first', country[0], 'country')
 
   const handleChange = (event) => {
     setNewName(event.target.value)
@@ -872,6 +871,32 @@ const App = () => {
     );
     console.log('searchResult', searchResult)
     setResult(searchResult)
+    searchResult.forEach(country => {
+      if (country.capitalInfo && country.capitalInfo.latlng
+        && country.capitalInfo.latlng.length === 2) {
+          console.log(country)
+        const [lat, lon] = country.capitalInfo.latlng;
+        getWeather(lat, lon, country.cca3);
+      }
+    });
+  }
+
+  const getWeather = (lat, lon, countryCode) => {
+    const apiKey = import.meta.env.VITE_API_KEY
+    // variable api_key has now the value set in startup
+    // const apiKey = 'b939ddee5c336455491661e92b1aace4'; // Replace with your OpenWeatherMap API key
+    axios
+    .get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`)
+    .then(response => {
+      setWeather(prevWeather => {
+        const updatedWeather = {
+          ...prevWeather,
+          [countryCode]: response.data
+        };
+        console.log(updatedWeather); // Print updated weather here
+        return updatedWeather;
+      });
+    });
   }
 
   const processResult = (result) => {
@@ -890,14 +915,27 @@ const App = () => {
               <li key={index}>{language}</li>
             ))}
           </ul>
-          <img src={country.flags.png} alt={country.name.common} width="100" height="100" />
+          <img src={country.flags.png} alt={country.name.common} width="200" height="100" />
+          {weather[country.cca3] && (
+            <div>
+              <h3>Weather in {country.capital}</h3>
+              <p>Temperature: {weather[country.cca3].main.temp} K</p>
+              <p>Weather: {weather[country.cca3].weather[0].description}</p>
+              <img
+                src={`https://openweathermap.org/img/wn/${weather[country.cca3].weather[0].icon}@2x.png`}
+                alt="Weather icon"
+              />
+            </div>
+          )}
         </div>
       ))
     }
     return result.map(country => (
       <div key={country.cca3}>
         <p>{country.name.common}
-          <button onClick={() => setResult([country])}>show</button>
+          <button onClick={() => {
+            setResult([country])
+          }}>show</button>
         </p>
       </div>
     ))
