@@ -750,85 +750,170 @@ import SearchFilter from './components/SearchFilter.jsx'
 //Exercises 2.6.-2.10
 //我们来创建一个简单的电话簿
 
+// const App = () => {
+//   const [persons, setPersons] = useState([])
+//   const [newName, setNewName] = useState('type a name...')
+//   const [newNumber, setNewNumber] = useState('type a number...')
+//   const [search, setSearch] = useState('')
+//   const [result, setResult] = useState([])
+
+
+// //数据的初始状态是使用axios-library从服务器获取的。用一个效果钩子来完成获取。
+//   useEffect(() => {
+//     console.log('effect')
+//     axios
+//       .get('http://localhost:3001/persons')
+//       .then(response => {
+//         console.log('promise fulfilled')
+//         setPersons(response.data)
+//       })
+//   }, [])
+//   console.log('render', persons.length, 'persons')
+
+
+
+//   const handleNoteChange = (event) => {
+//     console.log(event.target.value)
+//     setNewName(event.target.value)
+//   }
+
+//   const handleNumberChange = (event) => {
+//     console.log(event.target.value)
+//     setNewNumber(event.target.value)
+//   }
+
+//   const addPerson = (event) => {
+//     event.preventDefault()
+//     console.log('button clicked', event.target)
+//     const personObject = {
+//       name: newName,
+//       id: persons.length + 1,
+//       number: newNumber
+//     }
+//     if (persons.find(person => person.name === newName)) {
+//       alert(`${newName} is already added to phonebook`)
+//       setNewName('type a name...')
+//       setNewNumber('type a number...')
+//       return
+//     }
+//     setPersons(persons.concat(personObject))
+//     setNewName('type a name...')
+//     setNewNumber('type a number...')
+//   }
+
+//   const handleSearchChange = (event) => {
+//     console.log(event.target.value)
+//     setSearch(event.target.value)
+//   }
+
+//   const searchTarget = (event) => {
+//     // 实现一个搜索字段，可以用来按名字过滤人的列表
+//     event.preventDefault()
+//     const searchResult = persons.filter(person =>
+//       person.name.toLowerCase() === search.toLowerCase()
+//     );
+//     console.log('searchResult', searchResult)
+//     setResult(searchResult)
+
+//   }
+
+//   return (
+//     <div>
+//       <h2>Phonebook</h2>
+//       <SearchFilter searchTarget={searchTarget} search={search} setSearch={setSearch} setResult={setResult}
+//         handleSearchChange={handleSearchChange} />
+//       <h2>Add a New</h2>
+//       <PersonForm addPerson={addPerson} newName={newName}
+//         handleNoteChange={handleNoteChange} newNumber={newNumber}
+//         handleNumberChange={handleNumberChange} />
+//       <h2>Numbers</h2>
+//       {/* 通过允许用户向电话簿中添加电话号码来扩展你的应用 */}
+//       <Persons result={result} persons={persons} />
+//     </div>
+//   )
+// }
+
+// ========================================
+
+
+// API https://restcountries.com以机器可读的格式提供不同国家的数据，这是所谓的REST API。
+
+// 创建一个应用，在其中可以查看不同国家的数据。这个应用可能应该从端点all获取数据。
+
+// 用户界面非常简单。要显示的国家是通过在搜索栏里输入一个搜索查询来找到的。
+
+// 如果有太多(超过10个)国家符合查询条件，则会提示用户使他们的查询更具体。
 const App = () => {
-  const [persons, setPersons] = useState([])
-  const [newName, setNewName] = useState('type a name...')
-  const [newNumber, setNewNumber] = useState('type a number...')
-  const [search, setSearch] = useState('')
+  const [country, setCountry] = useState([])
+  const [newName, setNewName] = useState('')
   const [result, setResult] = useState([])
 
-
-//数据的初始状态是使用axios-library从服务器获取的。用一个效果钩子来完成获取。
+  //从服务器获取数据
   useEffect(() => {
     console.log('effect')
     axios
-      .get('http://localhost:3001/persons')
+      .get('https://restcountries.com/v3.1/all')
       .then(response => {
         console.log('promise fulfilled')
-        setPersons(response.data)
+        setCountry(response.data)
       })
   }, [])
-  console.log('render', persons.length, 'persons')
+  console.log('render', country.length, 'countries')
+  console.log('render first', country[0], 'country')
 
-
-
-  const handleNoteChange = (event) => {
-    console.log(event.target.value)
+  const handleChange = (event) => {
     setNewName(event.target.value)
   }
 
-  const handleNumberChange = (event) => {
-    console.log(event.target.value)
-    setNewNumber(event.target.value)
-  }
-
-  const addPerson = (event) => {
-    event.preventDefault()
-    console.log('button clicked', event.target)
-    const personObject = {
-      name: newName,
-      id: persons.length + 1,
-      number: newNumber
-    }
-    if (persons.find(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
-      setNewName('type a name...')
-      setNewNumber('type a number...')
-      return
-    }
-    setPersons(persons.concat(personObject))
-    setNewName('type a name...')
-    setNewNumber('type a number...')
-  }
-
-  const handleSearchChange = (event) => {
-    console.log(event.target.value)
-    setSearch(event.target.value)
-  }
-
   const searchTarget = (event) => {
-    // 实现一个搜索字段，可以用来按名字过滤人的列表
     event.preventDefault()
-    const searchResult = persons.filter(person =>
-      person.name.toLowerCase() === search.toLowerCase()
+    const searchResult = country.filter(country =>
+      country.name.common.toLowerCase().includes(newName.toLowerCase())
     );
     console.log('searchResult', searchResult)
     setResult(searchResult)
+  }
 
+  const processResult = (result) => {
+    if (result.length > 10) {
+      return 'Too many matches, specify another filter'
+    }
+    if (result.length === 1) {
+      return result.map(country => (
+        <div key={country.cca3}>
+          <h2>{country.name.common}</h2>
+          <p>capital {country.capital[0]}</p>
+          <p>population {country.population}</p>
+          <h3>languages</h3>
+          <ul>
+            {Object.values(country.languages).map((language, index) => (
+              <li key={index}>{language}</li>
+            ))}
+          </ul>
+          <img src={country.flags.png} alt={country.name.common} width="100" height="100" />
+        </div>
+      ))
+    }
+    return result.map(country => (
+      <div key={country.cca3}>
+        <p>{country.name.common}
+          <button onClick={() => setResult([country])}>show</button>
+        </p>
+      </div>
+    ))
   }
 
   return (
     <div>
-      <h2>Phonebook</h2>
-      <SearchFilter searchTarget={searchTarget} search={search} setSearch={setSearch} setResult={setResult}
-        handleSearchChange={handleSearchChange} />
-      <h2>Add a New</h2>
-      <PersonForm addPerson={addPerson} newName={newName}
-        handleNoteChange={handleNoteChange} newNumber={newNumber}
-        handleNumberChange={handleNumberChange} />
-      <h2>Numbers</h2>
-      {/* 通过允许用户向电话簿中添加电话号码来扩展你的应用 */}
-      <Persons result={result} persons={persons} />
+      <form onSubmit={searchTarget}>
+        <div>
+          find countries: <input value={newName} onChange={handleChange} />
+        </div>
+        <div>
+          <button type="submit">search</button>
+        </div>
+      </form>
+      <div>{processResult(result)}</div>
     </div>
   )
 }
