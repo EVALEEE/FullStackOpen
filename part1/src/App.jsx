@@ -726,6 +726,25 @@ const App = () => {
   { console.log('notes', notes) }
   { console.log('notesToShow', notesToShow) }
 
+  const toggleImportanceOf = (id) => {
+    const url = `http://localhost:3001/notes/${id}`
+    const note = notes.find(n => n.id === id)
+    console.log(id)
+    console.log(note)
+    const changedNote = { ...note, important: !note.important }//旧笔记的完全拷贝
+    //{ ...note }创建了一个新的对象，并复制了note对象的所有属性, 同时新对象的important属性到了它在原始对象中先前值的否定
+
+    //新的note会以PUT请求的方式发送到后端，在那里它将取代旧的对象
+    axios.put(url, changedNote).then(response => {
+      setNotes(notes.map(note => note.id !== id ? note : response.data))
+      //回调函数将组件的notes状态设置为一个新的数组，该数组包含了之前notes数组中的所有项目，除了旧的笔记，它被服务器返回的更新版本所取代。
+      //map方法通过将旧数组中的每个项目映射到新数组中的一个项目来创建一个新数组
+      // 如果note.id !== id为真，我们就把旧数组中的项目复制到新数组中。如果条件是假的，那么由服务器返回的笔记对象就会被添加到数组中
+    })
+
+    console.log(`importance of ${id} needs to be toggled`)
+  }
+
   return (
     <div>
       <h1>Notes</h1>
@@ -736,7 +755,11 @@ const App = () => {
       </div>
       <ul>
         {notesToShow.map(note =>
-          <Note key={note.id} note={note} />
+          <Note
+            key={note.id}
+            note={note}
+            toggleImportance={() => toggleImportanceOf(note.id)}
+          />
         )}
       </ul>
       <form onSubmit={addNote}>
