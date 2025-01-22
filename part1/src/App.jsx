@@ -7,6 +7,7 @@ import PersonForm from './components/PersonForm.jsx'
 import Persons from './components/Persons.jsx'
 import SearchFilter from './components/SearchFilter.jsx'
 import noteService from './services/notes'
+import personService from './services/persons'
 
 // import { useState } from 'react'
 
@@ -809,11 +810,10 @@ const App = () => {
   //数据的初始状态是使用axios-library从服务器获取的。用一个效果钩子来完成获取。
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(returnedPersons => {
+        setPersons(returnedPersons)
       })
   }, [])
   console.log('render', persons.length, 'persons')
@@ -837,6 +837,7 @@ const App = () => {
       id: persons.length + 1,
       number: newNumber
     }
+
     if (persons.find(person => person.name === newName)) {
       alert(`${newName} is already added to phonebook`)
       setNewName('type a name...')
@@ -844,10 +845,10 @@ const App = () => {
       return
     }
 
-    axios
-      .post('http://localhost:3001/persons', personObject)
-      .then(response => {
-        setPersons(persons.concat(personObject))
+    personService
+      .create(personObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
         setNewName('type a name...')
         setNewNumber('type a number...')
       })
