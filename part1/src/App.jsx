@@ -834,7 +834,7 @@ const App = () => {
     console.log('button clicked', event.target)
     const personObject = {
       name: newName,
-      id: persons.length + 1,
+      // id: persons.length + 1,
       number: newNumber
     }
 
@@ -852,6 +852,20 @@ const App = () => {
         setNewName('type a name...')
         setNewNumber('type a number...')
       })
+  }
+
+  const deletePerson = (id) => {
+    if (window.confirm("Are you sure you want to delete this person?")) {
+      personService
+        .deletePerson(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id))
+        })
+        .catch(error => {
+          alert(`The person was already deleted from the server`)
+          setPersons(persons.filter(person => person.id !== id))
+        })
+    }
   }
 
   const handleSearchChange = (event) => {
@@ -881,7 +895,7 @@ const App = () => {
         handleNumberChange={handleNumberChange} />
       <h2>Numbers</h2>
       {/* 通过允许用户向电话簿中添加电话号码来扩展你的应用 */}
-      <Persons result={result} persons={persons} />
+      <Persons result={result} persons={persons} deletePerson={deletePerson} />
     </div>
   )
 }
