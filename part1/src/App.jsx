@@ -8,6 +8,7 @@ import Persons from './components/Persons.jsx'
 import SearchFilter from './components/SearchFilter.jsx'
 import noteService from './services/notes'
 import personService from './services/persons'
+import Notification from './components/Notification.jsx'
 
 // import { useState } from 'react'
 
@@ -664,13 +665,30 @@ import personService from './services/persons'
 // const App = (props) => {
 //   const [notes, setNotes] = useState(props.notes)
 
+// const Footer = () => {
+//   // 构成应用功能实体的结构单元是React组件。一个React组件定义了构造内容的HTML，
+//   // 决定功能的JavaScript函数，以及组件的样式；所有这些都在一个地方。
+//   // 这是为了创建尽可能独立和可重复使用的单个组件。
+//   const footerStyle = {
+//     color: 'green',
+//     fontStyle: 'italic',
+//     fontSize: 16
+//   }
+//   return (
+//     <div style={footerStyle}>
+//       <br />
+//       <em>Note app, Department of Computer Science, University of Helsinki 2022</em>
+//     </div>
+//   )
+// }
+
+
 // const App = () => {
 //   const [notes, setNotes] = useState([])
 //   //添加一个新的状态，叫做newNote，用来存储用户提交的输入，让我们把它设置为input元素的value属性
-//   const [newNote, setNewNote] = useState(
-//     'a new note...'
-//   )
+//   const [newNote, setNewNote] = useState('a new note...')
 //   const [showAll, setShowAll] = useState(true)//在App组件中添加一个状态，跟踪哪些笔记应该被显示
+//   const [errorMessage, setErrorMessage] = useState('some error happened...')
 
 
 //   //默认情况下，效果会在每次完成渲染后运行，但你可以选择只在某些值发生变化时启动它。
@@ -750,9 +768,12 @@ import personService from './services/persons'
 //       })
 //       //注册一个错误处理程序,如果请求失败，与catch方法注册的事件处理程序被调用
 //       .catch(error => {
-//         alert(
-//           `the note '${note.content}' was already deleted from server`
+//         setErrorMessage(
+//           `Note '${note.content}' was already removed from server`
 //         )
+//         setTimeout(() => {
+//           setErrorMessage(null)
+//         }, 5000)
 //         setNotes(notes.filter(n => n.id != id))//删除的笔记会从状态中被过滤掉
 //       })
 
@@ -764,13 +785,13 @@ import personService from './services/persons'
 //     //   //map方法通过将旧数组中的每个项目映射到新数组中的一个项目来创建一个新数组
 //     //   // 如果note.id !== id为真，我们就把旧数组中的项目复制到新数组中。如果条件是假的，那么由服务器返回的笔记对象就会被添加到数组中
 //     // })
-
 //     console.log(`importance of ${id} needs to be toggled`)
 //   }
 
 //   return (
 //     <div>
 //       <h1>Notes</h1>
+//       <Notification message={errorMessage} />
 //       <div>
 //         <button onClick={() =>
 //           setShowAll(!showAll)}> show {showAll ? 'important' : 'all'}
@@ -790,6 +811,7 @@ import personService from './services/persons'
 //           onChange={handleNoteChange} />
 //         <button type="submit">save</button>
 //       </form>
+//       <Footer />
 //     </div>
 //   )
 // }
@@ -805,6 +827,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('type a number...')
   const [search, setSearch] = useState('')
   const [result, setResult] = useState([])
+  const [message, setMessage] = useState('')
 
 
   //数据的初始状态是使用axios-library从服务器获取的。用一个效果钩子来完成获取。
@@ -846,11 +869,17 @@ const App = () => {
             setPersons(persons.map(person => person.id !== existingPerson.id ? person : returnedPerson))
             setNewName('type a name...')
             setNewNumber('type a number...')
+            setMessage(
+              `${personObject.name} has been updated`
+            )
+            setTimeout(() => {
+              setMessage(null);
+            }, 2000);
           })
-          // .catch(error => {
-          //   alert(`The person '${newName}' was already deleted from the server`)
-          //   setPersons(persons.filter(person => person.id !== existingPerson.id))
-          // })
+        // .catch(error => {
+        //   alert(`The person '${newName}' was already deleted from the server`)
+        //   setPersons(persons.filter(person => person.id !== existingPerson.id))
+        // })
       }
     } else {
       personService
@@ -859,6 +888,13 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName('type a name...')
           setNewNumber('type a number...')
+          //在成功的操作被执行后（一个人被添加或一个数字被改变）显示一个持续几秒钟的通知。
+          setMessage(
+            `Added ${personObject.name}`
+          )
+          setTimeout(() => {
+            setMessage(null);
+          }, 2000);
         })
     }
   }
@@ -896,6 +932,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      {message && <Notification message={message} />}
+      {/* 当 message 为 null 时，Notification 组件将不会被渲染。 */}
       <SearchFilter searchTarget={searchTarget} search={search} setSearch={setSearch} setResult={setResult}
         handleSearchChange={handleSearchChange} />
       <h2>Add a New</h2>
