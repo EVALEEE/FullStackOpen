@@ -865,7 +865,7 @@ const App = () => {
         personService
           .update(existingPerson.id, { ...existingPerson, number: newNumber })
           .then(returnedPerson => {
-            console.log("aaa", returnedPerson)
+            // console.log("aaa", returnedPerson)
             setPersons(persons.map(person => person.id !== existingPerson.id ? person : returnedPerson))
             setNewName('type a name...')
             setNewNumber('type a number...')
@@ -875,6 +875,15 @@ const App = () => {
             setTimeout(() => {
               setMessage(null);
             }, 2000);
+          })
+          .catch(error => {
+            console.error('Request failed:', error);
+            setMessage(
+              `Error, ${personObject.name} has been deleted!`
+            )
+            setTimeout(() => {
+              setMessage(null);
+            }, 3000);
           })
         // .catch(error => {
         //   alert(`The person '${newName}' was already deleted from the server`)
@@ -905,6 +914,13 @@ const App = () => {
         .deletePerson(id)
         .then(() => {
           setPersons(persons.filter(person => person.id !== id))
+          //在成功的操作被执行后（一个人被添加或一个数字被改变）显示一个持续几秒钟的通知。
+          setMessage(
+            `Deleted Sucessfully!`
+          )
+          setTimeout(() => {
+            setMessage(null);
+          }, 2000);
         })
         .catch(error => {
           alert(`The person was already deleted from the server`)

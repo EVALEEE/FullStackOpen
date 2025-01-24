@@ -1,36 +1,5 @@
 {
-  "persons": [
-    {
-      "name": "type a name...",
-      "number": "a",
-      "id": "9824"
-    },
-    {
-      "id": "e196",
-      "name": "11",
-      "number": "11"
-    },
-    {
-      "id": "1033",
-      "name": "a",
-      "number": "a"
-    },
-    {
-      "id": "7944",
-      "name": "b",
-      "number": "b"
-    },
-    {
-      "id": "8058",
-      "name": "d",
-      "number": "d"
-    },
-    {
-      "id": "45de",
-      "name": "c",
-      "number": "c"
-    }
-  ],
+  "persons": [],
   "notes": [
     {
       "content": "Note 1",
