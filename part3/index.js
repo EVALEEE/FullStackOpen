@@ -56,15 +56,25 @@ app.get('/api/notes/:id', (request, response) => {
     // 使用冒号语法为 Express 中的路由定义 参数化路由
     const id = request.params.id //id是一个字符串
     const note = notes.find(note => note.id === Number(id))
-   
+
     // 如果没有找到笔记，服务器应该用状态代码 404 not found 来响应
     if (note) {
         response.json(note)
-      } else {
+    } else {
         response.status(404).end()
-      }
+    }
     // Express 自动将 Content-Type 头设置为 application/json 的适当值。
 })
+
+
+app.delete('/api/notes/:id', (request, response) => {
+    const id = request.params.id
+    notes = notes.filter(note => note.id !== Number(id))
+
+    //如果删除资源是成功的，也就是说，笔记存在并且被删除了，我们用状态代码 204 无内容 来响应请求，并且在响应中不返回数据。
+    response.status(204).end()
+})
+
 
 //绑定了分配给 app 变量的 http 服务器，以监听发送到 3001 端口的 HTTP 请求。
 const PORT = 3001
