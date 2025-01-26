@@ -5,7 +5,8 @@
 const express = require('express')
 const app = express()
 //导入了 express，这次是一个 函数 ，用来创建一个存储在 app 变量中的 Express 应用
-
+app.use(express.json()) // 为了方便地访问数据，我们需要 express json-parser 的帮助，它可以通过命令 app.use(express.json()) 来使用
+//json-parser 的功能是将请求的 JSON 数据转化为 JavaScript 对象，然后在调用路由处理程序之前将其附加到 request 对象的 body 属性。
 
 let notes = [
     {
@@ -51,12 +52,20 @@ app.get('/', (request, response) => {
 //由于参数是一个字符串，Express 自动将 Content-Type 头的值设置为 text/html。响应的状态代码默认为 200
 
 
+
+// 新增处理 /api/notes 路径的 GET 请求的路由
+app.get('/api/notes', (request, response) => {
+    response.json(notes)
+})
+
+
+
 //第二个路由定义了一个事件处理程序，处理向应用的 notes 路径发出的 HTTP GET 请求。
 app.get('/api/notes/:id', (request, response) => {
     // 使用冒号语法为 Express 中的路由定义 参数化路由
     const id = request.params.id //id是一个字符串
     const note = notes.find(note => note.id === Number(id))
-
+    // console.log(request.headers)
     // 如果没有找到笔记，服务器应该用状态代码 404 not found 来响应
     if (note) {
         response.json(note)
@@ -73,6 +82,37 @@ app.delete('/api/notes/:id', (request, response) => {
 
     //如果删除资源是成功的，也就是说，笔记存在并且被删除了，我们用状态代码 204 无内容 来响应请求，并且在响应中不返回数据。
     response.status(204).end()
+})
+
+const generateId = () => {
+    const maxId = notes.length > 0
+        ? Math.max(...notes.map(n => n.id))
+        : 0
+    return maxId + 1
+}
+
+app.post('/api/notes', (request, response) => {
+    const body = request.body //如果没有 json-parser，body 属性将是未定义的
+
+    // 通过定义 content 属性不得为空来改进这个应用
+    if (!body.content) {
+        // 如果收到的数据缺少 content 属性的值，服务器将以状态代码 400 bad request 响应请求。
+        return response.status(400).json({
+            error: 'content missing'
+        })
+    }
+
+    const note = {
+        content: body.content,
+        important: body.important || false,
+        date: new Date(), //date 属性的生成是由服务器完成的
+        id: generateId(),
+      }
+
+    notes = notes.concat(note)
+
+    console.log(note)
+    response.json(note)
 })
 
 
