@@ -52,9 +52,17 @@ app.get('/', (request, response) => {
 
 
 //第二个路由定义了一个事件处理程序，处理向应用的 notes 路径发出的 HTTP GET 请求。
-app.get('/api/notes', (request, response) => {
-    // 该请求用 response 对象的 json 方法来响应。调用该方法将发送传给它的 notes 数组，作为 JSON 格式的字符串
-    response.json(notes)
+app.get('/api/notes/:id', (request, response) => {
+    // 使用冒号语法为 Express 中的路由定义 参数化路由
+    const id = request.params.id //id是一个字符串
+    const note = notes.find(note => note.id === Number(id))
+   
+    // 如果没有找到笔记，服务器应该用状态代码 404 not found 来响应
+    if (note) {
+        response.json(note)
+      } else {
+        response.status(404).end()
+      }
     // Express 自动将 Content-Type 头设置为 application/json 的适当值。
 })
 
