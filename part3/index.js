@@ -3,8 +3,12 @@
 // 应用导入了 Node 的内置 网络服务器 模块
 
 const express = require('express')
-const app = express()
-//导入了 express，这次是一个 函数 ，用来创建一个存储在 app 变量中的 Express 应用
+
+// cors 中间件 使用 Node's cors 中间件来允许来自其他原点的请求
+const cors = require('cors')
+
+const app = express()//导入了 express，这次是一个 函数 ，用来创建一个存储在 app 变量中的 Express 应用
+app.use(cors())
 app.use(express.json()) // 为了方便地访问数据，我们需要 express json-parser 的帮助，它可以通过命令 app.use(express.json()) 来使用
 //json-parser 的功能是将请求的 JSON 数据转化为 JavaScript 对象，然后在调用路由处理程序之前将其附加到 request 对象的 body 属性。
 
@@ -117,9 +121,11 @@ app.post('/api/notes', (request, response) => {
 
 
 //绑定了分配给 app 变量的 http 服务器，以监听发送到 3001 端口的 HTTP 请求。
-const PORT = 3001
+// const PORT = 3001
+// app.listen(PORT, () => {
+//     console.log(`Server running on port ${PORT}`)
+// })
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
+  console.log(`Server running on port ${PORT}`)
 })
-// app.listen(PORT)
-// console.log(`Server running on port ${PORT}`)
