@@ -1,6 +1,6 @@
 import axios from 'axios'
 // const baseUrl = 'http://localhost:3001/notes'
-const baseUrl = 'http://part3-seven.vercel.app/api/notes'
+const baseUrl = 'https://full-stack-open-backend.vercel.app/api/notes'
 
 const getAll = () => {
     return axios.get(baseUrl)

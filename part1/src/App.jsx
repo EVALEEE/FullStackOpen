@@ -694,7 +694,7 @@ const App = () => {
     console.log('effect')
     axios
       // .get('http://localhost:3001/notes')
-      .get('http://part3-seven.vercel.app/api/notes')
+      .get('https://full-stack-open-backend.vercel.app/api/notes')
       .then(response => {
         // 当数据从服务器到达时，JavaScript运行时调用注册为事件处理程序的函数，该函数将 promise 兑现打印到控制台，
         // 并使用函数setNotes(response.data)将从服务器收到的注释存储到状态中。
