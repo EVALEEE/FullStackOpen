@@ -1,16 +1,20 @@
 
 // const http = require('http')
 // 应用导入了 Node 的内置 网络服务器 模块
+require('dotenv').config()
+// 通过调用 require('dotenv').config()，我们可以将环境变量从 .env 文件加载到 Node.js 的 process.env 对象中
 
 const express = require('express')
 
 // cors 中间件 使用 Node's cors 中间件来允许来自其他原点的请求
 const cors = require('cors')
-
 const app = express()//导入了 express，这次是一个 函数 ，用来创建一个存储在 app 变量中的 Express 应用
+const Note = require('./models/note')
+
 app.use(cors())
 app.use(express.json()) // 为了方便地访问数据，我们需要 express json-parser 的帮助，它可以通过命令 app.use(express.json()) 来使用
 //json-parser 的功能是将请求的 JSON 数据转化为 JavaScript 对象，然后在调用路由处理程序之前将其附加到 request 对象的 body 属性。
+
 
 let notes = [
     {
@@ -63,9 +67,11 @@ app.get('/', (request, response) => {
 
 
 
-// 新增处理 /api/notes 路径的 GET 请求的路由
+// GET 请求的路由
 app.get('/api/notes', (request, response) => {
-    response.json(notes)
+    Note.find({}).then(notes => {
+        response.json(notes)
+    })
 })
 
 
@@ -117,7 +123,7 @@ app.post('/api/notes', (request, response) => {
         important: body.important || false,
         date: new Date(), //date 属性的生成是由服务器完成的
         id: generateId(),
-      }
+    }
 
     notes = notes.concat(note)
 
@@ -131,7 +137,7 @@ app.post('/api/notes', (request, response) => {
 // app.listen(PORT, () => {
 //     console.log(`Server running on port ${PORT}`)
 // })
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+    console.log(`Server running on port ${PORT}`)
 })
