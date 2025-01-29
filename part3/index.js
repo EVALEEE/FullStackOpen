@@ -57,13 +57,13 @@ app.get('/api/notes/:id', (request, response) => {
 
 
 
-// app.delete('/api/notes/:id', (request, response) => {
-//     const id = request.params.id
-//     notes = notes.filter(note => note.id !== Number(id))
-
-//     //如果删除资源是成功的，也就是说，笔记存在并且被删除了，我们用状态代码 204 无内容 来响应请求，并且在响应中不返回数据。
-//     response.status(204).end()
-// })
+app.delete('/api/notes/:id', (request, response, next) => {
+    Note.findByIdAndDelete(request.params.id)
+      .then(result => {
+        response.status(204).end()
+      })
+      .catch(error => next(error))
+  })
 
 
 
@@ -95,6 +95,24 @@ app.post('/api/notes', (request, response) => {
       response.status(500).json({ error: 'Error saving note' })
     })
 })
+
+
+
+app.put('/api/notes/:id', (request, response, next) => {
+    const body = request.body
+  
+    const note = {
+      content: body.content,
+      important: body.important,
+    }
+  
+    Note.findByIdAndUpdate(request.params.id, note, { new: true })
+      .then(updatedNote => {
+        response.json(updatedNote)
+        console.log('Updated note:', updatedNote)
+      })
+      .catch(error => next(error))
+  })
 
 
 
