@@ -110,6 +110,11 @@ app.put('/api/notes/:id', (request, response, next) => {
   }
 
   Note.findByIdAndUpdate(request.params.id, note, { new: true })
+  //findByIdAndUpdate方法接收的是一个常规的JavaScript对象作为参数
+  
+  //默认情况下，事件处理器的updatedNote参数接收的是没有修改的原始文档。
+  //我们添加了可选的{ new: true }参数，
+  //这将导致我们的事件处理器被调用时，使用新的修改过的文档而不是原始文档。
     .then(updatedNote => {
       response.json(updatedNote)
       console.log('Updated note:', updatedNote)
