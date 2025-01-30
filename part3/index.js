@@ -97,7 +97,7 @@ app.post('/api/notes', (request, response) => {
 })
 
 
-
+//更新笔记
 app.put('/api/notes/:id', (request, response, next) => {
     const body = request.body
   
@@ -114,13 +114,6 @@ app.put('/api/notes/:id', (request, response, next) => {
       .catch(error => next(error))
   })
 
-
-
-//绑定了分配给 app 变量的 http 服务器，以监听发送到 3001 端口的 HTTP 请求。
-// const PORT = 3001
-// app.listen(PORT, () => {
-//     console.log(`Server running on port ${PORT}`)
-// })
 const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)

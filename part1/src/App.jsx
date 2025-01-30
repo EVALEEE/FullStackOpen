@@ -10,111 +10,6 @@ import noteService from './services/notes'
 import personService from './services/persons'
 import Notification from './components/Notification.jsx'
 
-// import { useState } from 'react'
-
-// const App = () => {
-//   const now = new Date()
-//   const a = 10
-//   const b = 20
-//   return React.createElement(
-//     'div',
-//     null,
-//     React.createElement(
-//       'p', null, 'Hello world, it is ', now.toString()
-//     ),
-//     React.createElement(
-//       'p', null, a, ' plus ', b, ' is ', a + b
-//     )
-//   )
-// }
-
-// ========================================
-
-// const Hello = () => {
-//   return (
-//     <div>
-//       <p>Hello world</p>
-//     </div>
-//   )
-// }
-
-// const Cool = () => {
-//   return (
-//     <div>
-//       <p>this is cool !!!</p>
-//     </div>
-//   )
-// }
-
-// const App = () => {
-//   return (
-//     <div>
-//       <div>
-//         <h1>Greetings</h1>
-//         <Hello />
-//       </div>
-//       <div>
-//         <Cool />
-//       </div>
-//     </div>
-//   )
-// }
-
-// ========================================
-
-// const Footer = () => {
-//   return (
-//     <div>
-//       Greeting app created by <a href="https://github.com/mluukkai">mluukkai</a>
-//     </div>
-//   )
-// }
-
-// const Hello = (props) => {
-//   const now = new Date()
-//   return (
-//     <div>
-//       <p>Hello {props.name} your age is {props.age} now is {now.toString()}</p>
-//     </div>
-//   )
-// }
-
-// const App = () => {
-//   const name = 'Peter'
-//   const age = 10
-//   console.log(name)
-// return (
-// React组件的内容（通常）需要包含一个根元素 
-//   <div>
-//     <div>
-//       <h1>Greetings</h1>
-//       <Hello name="George" age={29 + 5} />
-//       <Hello name={name} age={age} />
-//     </div>
-//   </div>
-// )
-// 使用根元素并不是唯一可行的选择。一个组件的array也是一个有效的解决方案。
-// return [
-//   <h1>Greetings</h1>,
-//   <Hello name="Maya" age={26 + 10} />,
-//   <Footer />
-// ]
-
-// 然而，定义应用的根元素时，不是一个特别明智的做法，它使代码看起来有点难看。
-// 由于根元素被强制规定了，我们在DOM树中有 "额外的 "div-elements。
-// 这可以通过使用fragments来避免，即用一个空元素来包装组件要返回的元素。
-//   return (
-//     <>
-//       <h1>Greetings</h1>
-//       <Hello name="Maya" age={26 + 10} />
-//       <Hello name={name} age={age} />
-//       <Footer />
-//     </>
-//   )
-//   // 这样由React生成的DOM也不再包含额外的div元素
-// }
-
-// ========================================
 
 // Practice 1.1 & 1.2:
 
@@ -178,18 +73,9 @@ import Notification from './components/Notification.jsx'
 // const App = () => {
 //   const course = 'Half Stack application development'
 //   const parts = [
-//     {
-//       name: 'Fundamentals of React',
-//       exercises: 10
-//     },
-//     {
-//       name: 'Using props to pass data',
-//       exercises: 7
-//     },
-//     {
-//       name: 'State of a component',
-//       exercises: 14
-//     }
+//     {name: 'Fundamentals of React', exercises: 10},
+//     {name: 'Using props to pass data', exercises: 7},
+//     {name: 'State of a component', exercises: 14}
 //   ]
 
 //   const Header = (props) => {
@@ -301,150 +187,6 @@ import Notification from './components/Notification.jsx'
 //   )
 // }
 
-// ========================================
-
-// const Hello = ({ name, age }) => {// 解构赋值 终极
-//   // const name = props.name
-//   // const age = props.age
-//  // const { name, age } = props // 解构赋值
-
-//   // 在JavaScript中，在函数中定义函数是一种常规操作
-//   const bornYear = () => new Date().getFullYear() - age
-
-//   return (
-//     <div>
-//       <p>
-//         Hello {name}, you are {age} years old
-//       </p>
-//       {/* 这个人的年龄不需要作为参数传给函数，因为它可以直接访问传给组件的所有prop。 */}
-//       <p>So you were probably born in {bornYear()}</p>
-//     </div>
-//   )
-// }
-
-
-// const App = () => {
-//   const name = 'Peter'
-//   const age = 10
-
-//   return (
-//     <div>
-//       <h1>Greetings</h1>
-//       {/* <Hello name="Maya" age={26} /> */}
-//       <Hello name={name} age={age} />
-//     </div>
-//   )
-// }
-
-// ========================================
-
-//Page re-rendering：
-//我们想创建一个计数器，其值随着时间的推移或点击按钮而增加
-
-//   const Display = (props) => <div>{props.counter}</div>
-
-// const App = () => {
-//   const [counter, setCounter] = useState(0)
-
-//   const increaseByOne = () => setCounter(counter + 1)
-//   const decreaseByOne = () => setCounter(counter - 1)
-//   const reset = () => setCounter(0)
-
-//   const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
-
-//   return (
-//     <div>
-//       <Display counter={counter} />
-//       <Button onClick={increaseByOne} text='plus' />
-//       <Button onClick={decreaseByOne} text='minus' />
-//       <Button onClick={reset} text='reset' />
-//     </div>
-//   )
-// }
-
-// ========================================
-
-// const History = (props) => {
-//   console.log('props value is', props)
-//   //History组件根据应用的状态渲染完全不同的React元素。这被称为条件渲染
-//   if (props.allClicks.length === 0) {
-//     return (
-//       <div>
-//         the app is used by pressing the buttons
-//       </div>
-//     )
-//   }
-//   return (
-//     <div>
-//       button press history: {props.allClicks.join(' ')}
-//     </div>
-//   )
-// }
-
-// const Button = ({ onClick, text }) => (
-//   <button onClick={onClick}>
-//     {text}
-//   </button>
-// )
-
-// const App = () => {
-//   const [left, setLeft] = useState(0)
-//   const [right, setRight] = useState(0)
-//   // 钩子只能从定义了React组件的函数体内部调用,不能从循环、条件表达式或任何不是定义组件的函数的地方调用
-//   // 这样做是为了确保钩子总是以相同的顺序被调用，如果不是这样的话，应用将表现得不正常
-
-//   //每一次点击都被存储在一个单独的状态中，名为allClicks，初始化为一个空数组
-//   const [allClicks, setAll] = useState([])
-
-//   const handleLeftClick = () => {
-//     setAll(allClicks.concat('L'))
-//     // 新的项目添加到数组中是通过concat方法完成的，
-//     // 该方法并不改变现有的数组，而是返回一个数组的新副本，并将项目添加到其中
-//     setLeft(left + 1)
-//   }
-
-//   const handleRightClick = () => {
-//     setAll(allClicks.concat('R'))
-//     setRight(right + 1)
-//   }
-
-//   return (
-//     <div>
-//       {left}
-//       <Button onClick={handleLeftClick} text='left' />
-//       <Button onClick={handleRightClick} text='right' />
-//       {right}
-//       <History allClicks={allClicks} />
-//     </div>
-//   )
-// }
-
-// ========================================
-
-// 一个事件处理程序不能是对一个函数的调用，它必须是一个函数或对一个函数的引用
-// const App = () => {
-//   const [value, setValue] = useState(10)
-
-//   const setToValue = (newValue) => {
-//     console.log('value now', newValue)
-//     setValue(newValue)
-//   }
-
-//   return (
-//     <div>
-//       {value}
-//       <button onClick={() => setToValue(1000)}>
-//         thousand
-//       </button>
-//       <button onClick={() => setToValue(0)}>
-//         reset
-//       </button>
-//       <button onClick={() => setToValue(value + 1)}>
-//         increment
-//       </button>
-//     </div>
-//   )
-// }
 
 // ========================================
 // Practice 1.6 - 1.14:
@@ -659,284 +401,283 @@ import Notification from './components/Notification.jsx'
 // }
 
 // ========================================
-
-
-const Footer = () => {
-  // 构成应用功能实体的结构单元是React组件。一个React组件定义了构造内容的HTML，
-  // 决定功能的JavaScript函数，以及组件的样式；所有这些都在一个地方。
-  // 这是为了创建尽可能独立和可重复使用的单个组件。
-  const footerStyle = {
-    color: 'green',
-    fontStyle: 'italic',
-    fontSize: 16
-  }
-  return (
-    <div style={footerStyle}>
-      <br />
-      <em>Note app, Department of Computer Science, University of Helsinki 2022</em>
-    </div>
-  )
-}
-
-const App = () => {
-  const [notes, setNotes] = useState([])
-  //添加一个新的状态，叫做newNote，用来存储用户提交的输入，让我们把它设置为input元素的value属性
-  const [newNote, setNewNote] = useState('a new note...')
-  const [showAll, setShowAll] = useState(true)//在App组件中添加一个状态，跟踪哪些笔记应该被显示
-  const [errorMessage, setErrorMessage] = useState(null)
-
-
-  //默认情况下，效果会在每次完成渲染后运行，但你可以选择只在某些值发生变化时启动它。
-  useEffect(() => {
-    // 该函数在渲染完组建之后运行
-    // 执行结果是effect被打印到控制台，命令axios.get开始从服务器获取数据，
-    // 并注册 response=> 函数作为该操作的event handler
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/api/notes')
-      // .get('https://full-stack-open-backend.vercel.app/api/notes')
-      .then(response => {
-        // 当数据从服务器到达时，JavaScript运行时调用注册为事件处理程序的函数，该函数将 promise 兑现打印到控制台，
-        // 并使用函数setNotes(response.data)将从服务器收到的注释存储到状态中。
-        console.log('promise fulfilled')
-        setNotes(response.data)
-      })
-  }, []) //useEffect的第二个参数用于指定效果的运行频率。如果第二个参数是一个空的数组[]，那么效果就只在组件的第一次渲染时运行。
-  // 定义该组件的函数主体被执行，该组件被首次渲染。在这一点上，render 0 notes被打印出来，意味着数据还没有从服务器上获取
-  // 对状态更新函数的调用会触发组件的重新渲染。结果，render 3 notes被打印到控制台，而从服务器上获取的笔记被渲染到屏幕上。
-
-
-  const addNote = (event) => {
-    event.preventDefault()
-    const noteObject = {
-      content: newNote,
-      important: false
-    }
-
-    noteService
-      .create(noteObject)
-      .then(returnedNote => {
-        setNotes(notes.concat(returnedNote))
-        setNewNote('')
-        setErrorMessage('success!')
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 1000)
-      })
-  }
-
-  //为了实现对输入元素的编辑，我们必须注册一个事件处理程序，使输入元素的变化与组件的状态同步。
-  const handleNoteChange = (event) => {
-    console.log(event.target.value)
-    setNewNote(event.target.value)
-    // 事件对象的target属性现在对应于被控制的input元素，而event.target.value指的是该元素的输入值。
-  }
-
-  const notesToShow = showAll
-    ? notes
-    : notes.filter(note => note.important === true)
-
-  { console.log('notes', notes) }
-  { console.log('notesToShow', notesToShow) }
-
-  const toggleImportanceOf = (id) => {
-    // const url = `http://localhost:3001/notes/${id}`
-    const note = notes.find(n => n.id === id)
-    // console.log(id)
-    // console.log(note)
-    const changedNote = { ...note, important: !note.important }//旧笔记的完全拷贝
-    //{ ...note }创建了一个新的对象，并复制了note对象的所有属性, 同时新对象的important属性到了它在原始对象中先前值的否定
-
-    noteService
-      .update(id, changedNote)
-      .then(returnedNote => {
-        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
-        setErrorMessage('success!')
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 3000)
-      })
-      //注册一个错误处理程序,如果请求失败，与catch方法注册的事件处理程序被调用
-      .catch(error => {
-        setErrorMessage(`Error: Note '${note.content}' was already removed from server`)
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 3000)
-        setNotes(notes.filter(n => n.id != id))//删除的笔记会从状态中被过滤掉
-      })
-  }
-
-  return (
-    <div>
-      <h1>Notes</h1>
-      <Notification message={errorMessage} />
-      <div>
-        <button onClick={() =>
-          setShowAll(!showAll)}> show {showAll ? 'important' : 'all'}
-        </button>
-      </div>
-      <ul>
-        {notesToShow.map(note =>
-          <Note
-            key={note.id}
-            note={note}
-            toggleImportance={() => toggleImportanceOf(note.id)}
-          />
-        )}
-      </ul>
-      <form onSubmit={addNote}>
-        <input value={newNote}
-          onChange={handleNoteChange} />
-        <button type="submit">save</button>
-      </form>
-      <Footer />
-    </div>
-  )
-}
-
-// ========================================
-
-//Exercises 2.6.-2.10
-//我们来创建一个简单的电话簿
+//Notes App
+// const Footer = () => {
+//   // 构成应用功能实体的结构单元是React组件。一个React组件定义了构造内容的HTML，
+//   // 决定功能的JavaScript函数，以及组件的样式；所有这些都在一个地方。
+//   // 这是为了创建尽可能独立和可重复使用的单个组件。
+//   const footerStyle = {
+//     color: 'green',
+//     fontStyle: 'italic',
+//     fontSize: 16
+//   }
+//   return (
+//     <div style={footerStyle}>
+//       <br />
+//       <em>Note app, Department of Computer Science, University of Helsinki 2022</em>
+//     </div>
+//   )
+// }
 
 // const App = () => {
-//   const [persons, setPersons] = useState([])
-//   const [newName, setNewName] = useState('type a name...')
-//   const [newNumber, setNewNumber] = useState('type a number...')
-//   const [search, setSearch] = useState('')
-//   const [result, setResult] = useState([])
-//   const [message, setMessage] = useState('')
+//   const [notes, setNotes] = useState([])
+//   //添加一个新的状态，叫做newNote，用来存储用户提交的输入，让我们把它设置为input元素的value属性
+//   const [newNote, setNewNote] = useState('a new note...')
+//   const [showAll, setShowAll] = useState(true)//在App组件中添加一个状态，跟踪哪些笔记应该被显示
+//   const [errorMessage, setErrorMessage] = useState(null)
 
 
-//   //数据的初始状态是使用axios-library从服务器获取的。用一个效果钩子来完成获取。
+//   //默认情况下，效果会在每次完成渲染后运行，但你可以选择只在某些值发生变化时启动它。
 //   useEffect(() => {
+//     // 该函数在渲染完组建之后运行
+//     // 执行结果是effect被打印到控制台，命令axios.get开始从服务器获取数据，
+//     // 并注册 response=> 函数作为该操作的event handler
 //     console.log('effect')
-//     personService
-//       .getAll()
-//       .then(returnedPersons => {
-//         setPersons(returnedPersons)
+//     axios
+//       .get('http://localhost:3001/api/notes')
+//       // .get('https://full-stack-open-backend.vercel.app/api/notes')
+//       .then(response => {
+//         // 当数据从服务器到达时，JavaScript运行时调用注册为事件处理程序的函数，该函数将 promise 兑现打印到控制台，
+//         // 并使用函数setNotes(response.data)将从服务器收到的注释存储到状态中。
+//         console.log('promise fulfilled')
+//         setNotes(response.data)
 //       })
-//   }, [])
-//   console.log('render', persons.length, 'persons')
+//   }, []) //useEffect的第二个参数用于指定效果的运行频率。如果第二个参数是一个空的数组[]，那么效果就只在组件的第一次渲染时运行。
+//   // 定义该组件的函数主体被执行，该组件被首次渲染。在这一点上，render 0 notes被打印出来，意味着数据还没有从服务器上获取
+//   // 对状态更新函数的调用会触发组件的重新渲染。结果，render 3 notes被打印到控制台，而从服务器上获取的笔记被渲染到屏幕上。
 
 
+//   const addNote = (event) => {
+//     event.preventDefault()
+//     const noteObject = {
+//       content: newNote,
+//       important: false
+//     }
+
+//     noteService
+//       .create(noteObject)
+//       .then(returnedNote => {
+//         setNotes(notes.concat(returnedNote))
+//         setNewNote('')
+//         setErrorMessage('success!')
+//         setTimeout(() => {
+//           setErrorMessage(null)
+//         }, 1000)
+//       })
+//   }
+
+//   //为了实现对输入元素的编辑，我们必须注册一个事件处理程序，使输入元素的变化与组件的状态同步。
 //   const handleNoteChange = (event) => {
 //     console.log(event.target.value)
-//     setNewName(event.target.value)
+//     setNewNote(event.target.value)
+//     // 事件对象的target属性现在对应于被控制的input元素，而event.target.value指的是该元素的输入值。
 //   }
 
-//   const handleNumberChange = (event) => {
-//     console.log(event.target.value)
-//     setNewNumber(event.target.value)
-//   }
+//   const notesToShow = showAll
+//     ? notes
+//     : notes.filter(note => note.important === true)
 
-//   const addPerson = (event) => {
-//     event.preventDefault()
-//     const personObject = {
-//       name: newName,
-//       number: newNumber
-//     }
+//   { console.log('notes', notes) }
+//   { console.log('notesToShow', notesToShow) }
 
-//     const existingPerson = persons.find(person => person.name === newName)
-//     if (existingPerson) {
-//       if (window.confirm(`${newName} is already added to phonebook, replace the old number with the new one?`)) {
-//         personService
-//           .update(existingPerson.id, { ...existingPerson, number: newNumber })
-//           .then(returnedPerson => {
-//             // console.log("aaa", returnedPerson)
-//             setPersons(persons.map(person => person.id !== existingPerson.id ? person : returnedPerson))
-//             setNewName('type a name...')
-//             setNewNumber('type a number...')
-//             setMessage(
-//               `${personObject.name} has been updated`
-//             )
-//             setTimeout(() => {
-//               setMessage(null);
-//             }, 2000);
-//           })
-//           .catch(error => {
-//             console.error('Request failed:', error);
-//             setMessage(
-//               `Error, ${personObject.name} has been deleted!`
-//             )
-//             setTimeout(() => {
-//               setMessage(null);
-//             }, 3000);
-//           })
+//   const toggleImportanceOf = (id) => {
+//     // const url = `http://localhost:3001/notes/${id}`
+//     const note = notes.find(n => n.id === id)
+//     // console.log(id)
+//     // console.log(note)
+//     const changedNote = { ...note, important: !note.important }//旧笔记的完全拷贝
+//     //{ ...note }创建了一个新的对象，并复制了note对象的所有属性, 同时新对象的important属性到了它在原始对象中先前值的否定
 
-//       }
-//     } else {
-//       personService
-//         .create(personObject)
-//         .then(returnedPerson => {
-//           setPersons(persons.concat(returnedPerson))
-//           setNewName('type a name...')
-//           setNewNumber('type a number...')
-//           //在成功的操作被执行后（一个人被添加或一个数字被改变）显示一个持续几秒钟的通知。
-//           setMessage(
-//             `Added ${personObject.name}`
-//           )
-//           setTimeout(() => {
-//             setMessage(null);
-//           }, 2000);
-//         })
-//     }
-//   }
-
-//   const deletePerson = (id) => {
-//     if (window.confirm("Are you sure you want to delete this person?")) {
-//       personService
-//         .deletePerson(id)
-//         .then(() => {
-//           setPersons(persons.filter(person => person.id !== id))
-//           //在成功的操作被执行后（一个人被添加或一个数字被改变）显示一个持续几秒钟的通知。
-//           setMessage(
-//             `Deleted Sucessfully!`
-//           )
-//           setTimeout(() => {
-//             setMessage(null);
-//           }, 2000);
-//         })
-//         .catch(error => {
-//           alert(`The person was already deleted from the server`)
-//           setPersons(persons.filter(person => person.id !== id))
-//         })
-//     }
-//   }
-
-//   const handleSearchChange = (event) => {
-//     console.log(event.target.value)
-//     setSearch(event.target.value)
-//   }
-
-//   const searchTarget = (event) => {
-//     // 实现一个搜索字段，可以用来按名字过滤人的列表
-//     event.preventDefault()
-//     const searchResult = persons.filter(person =>
-//       person.name.toLowerCase() === search.toLowerCase()
-//     );
-//     console.log('searchResult', searchResult)
-//     setResult(searchResult)
-
+//     noteService
+//       .update(id, changedNote)
+//       .then(returnedNote => {
+//         setNotes(notes.map(note => note.id !== id ? note : returnedNote))
+//         setErrorMessage('success!')
+//         setTimeout(() => {
+//           setErrorMessage(null)
+//         }, 3000)
+//       })
+//       //注册一个错误处理程序,如果请求失败，与catch方法注册的事件处理程序被调用
+//       .catch(error => {
+//         setErrorMessage(`Error: Note '${note.content}' was already removed from server`)
+//         setTimeout(() => {
+//           setErrorMessage(null)
+//         }, 3000)
+//         setNotes(notes.filter(n => n.id != id))//删除的笔记会从状态中被过滤掉
+//       })
 //   }
 
 //   return (
 //     <div>
-//       <h2>Phonebook</h2>
-//       {message && <Notification message={message} />}
-//       {/* 当 message 为 null 时，Notification 组件将不会被渲染。 */}
-//       <SearchFilter searchTarget={searchTarget} search={search} setSearch={setSearch} setResult={setResult}
-//         handleSearchChange={handleSearchChange} />
-//       <h2>Add a New</h2>
-//       <PersonForm addPerson={addPerson} newName={newName}
-//         handleNoteChange={handleNoteChange} newNumber={newNumber}
-//         handleNumberChange={handleNumberChange} />
-//       <h2>Numbers</h2>
-//       {/* 通过允许用户向电话簿中添加电话号码来扩展你的应用 */}
-//       <Persons result={result} persons={persons} deletePerson={deletePerson} />
+//       <h1>Notes</h1>
+//       <Notification message={errorMessage} />
+//       <div>
+//         <button onClick={() =>
+//           setShowAll(!showAll)}> show {showAll ? 'important' : 'all'}
+//         </button>
+//       </div>
+//       <ul>
+//         {notesToShow.map(note =>
+//           <Note
+//             key={note.id}
+//             note={note}
+//             toggleImportance={() => toggleImportanceOf(note.id)}
+//           />
+//         )}
+//       </ul>
+//       <form onSubmit={addNote}>
+//         <input value={newNote}
+//           onChange={handleNoteChange} />
+//         <button type="submit">save</button>
+//       </form>
+//       <Footer />
 //     </div>
 //   )
 // }
+
+// ========================================
+
+//Exercises 2.6.-2.10
+//电话簿
+
+const App = () => {
+  const [persons, setPersons] = useState([])
+  const [newName, setNewName] = useState('type a name...')
+  const [newNumber, setNewNumber] = useState('type a number...')
+  const [search, setSearch] = useState('')
+  const [result, setResult] = useState([])
+  const [message, setMessage] = useState('')
+
+
+  //数据的初始状态是使用axios-library从服务器获取的。用一个效果钩子来完成获取。
+  useEffect(() => {
+    console.log('effect')
+    personService
+      .getAll()
+      .then(returnedPersons => {
+        setPersons(returnedPersons)
+      })
+  }, [])
+  console.log('render', persons.length, 'persons')
+
+
+  const handleNoteChange = (event) => {
+    console.log(event.target.value)
+    setNewName(event.target.value)
+  }
+
+  const handleNumberChange = (event) => {
+    console.log(event.target.value)
+    setNewNumber(event.target.value)
+  }
+
+  const addPerson = (event) => {
+    event.preventDefault()
+    const personObject = {
+      name: newName,
+      number: newNumber
+    }
+
+    const existingPerson = persons.find(person => person.name === newName)
+    if (existingPerson) {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with the new one?`)) {
+        personService
+          .update(existingPerson.id, { ...existingPerson, number: newNumber })
+          .then(returnedPerson => {
+            // console.log("aaa", returnedPerson)
+            setPersons(persons.map(person => person.id !== existingPerson.id ? person : returnedPerson))
+            setNewName('type a name...')
+            setNewNumber('type a number...')
+            setMessage(
+              `${personObject.name} has been updated`
+            )
+            setTimeout(() => {
+              setMessage(null);
+            }, 2000);
+          })
+          .catch(error => {
+            console.error('Request failed:', error);
+            setMessage(
+              `Error, ${personObject.name} has been deleted!`
+            )
+            setTimeout(() => {
+              setMessage(null);
+            }, 3000);
+          })
+
+      }
+    } else {
+      personService
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName('type a name...')
+          setNewNumber('type a number...')
+          //在成功的操作被执行后（一个人被添加或一个数字被改变）显示一个持续几秒钟的通知。
+          setMessage(
+            `Added ${personObject.name}`
+          )
+          setTimeout(() => {
+            setMessage(null);
+          }, 2000);
+        })
+    }
+  }
+
+  const deletePerson = (id) => {
+    if (window.confirm("Are you sure you want to delete this person?")) {
+      personService
+        .deletePerson(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id))
+          //在成功的操作被执行后（一个人被添加或一个数字被改变）显示一个持续几秒钟的通知。
+          setMessage(
+            `Deleted Sucessfully!`
+          )
+          setTimeout(() => {
+            setMessage(null);
+          }, 2000);
+        })
+        .catch(error => {
+          alert(`The person was already deleted from the server`)
+          setPersons(persons.filter(person => person.id !== id))
+        })
+    }
+  }
+
+  const handleSearchChange = (event) => {
+    console.log(event.target.value)
+    setSearch(event.target.value)
+  }
+
+  const searchTarget = (event) => {
+    // 实现一个搜索字段，可以用来按名字过滤人的列表
+    event.preventDefault()
+    const searchResult = persons.filter(person =>
+      person.name.toLowerCase() === search.toLowerCase()
+    );
+    console.log('searchResult', searchResult)
+    setResult(searchResult)
+
+  }
+
+  return (
+    <div>
+      <h2>Phonebook</h2>
+      {message && <Notification message={message} />}
+      {/* 当 message 为 null 时，Notification 组件将不会被渲染。 */}
+      <SearchFilter searchTarget={searchTarget} search={search} setSearch={setSearch} setResult={setResult}
+        handleSearchChange={handleSearchChange} />
+      <h2>Add a New</h2>
+      <PersonForm addPerson={addPerson} newName={newName}
+        handleNoteChange={handleNoteChange} newNumber={newNumber}
+        handleNumberChange={handleNumberChange} />
+      <h2>Numbers</h2>
+      {/* 通过允许用户向电话簿中添加电话号码来扩展你的应用 */}
+      <Persons result={result} persons={persons} deletePerson={deletePerson} />
+    </div>
+  )
+}
 
 // ========================================
 
