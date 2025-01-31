@@ -72,7 +72,7 @@ app.delete('/api/notes/:id', (request, response, next) => {
 
 
 //创建新的Note
-app.post('/api/notes', (request, response) => {
+app.post('/api/notes', (request, response, next) => {
   console.log('Received POST request to /api/notes')  // 新增
   console.log('Request body:', request.body)  // 新增
   const body = request.body //如果没有 json-parser，body 属性将是未定义的
@@ -93,14 +93,12 @@ app.post('/api/notes', (request, response) => {
     .then(savedNote => {
       response.json(savedNote)
     })
-    .catch(error => {
-      console.error(error)
-      response.status(500).json({ error: 'Error saving note' })
-    })
+    .catch(error => next(error))
 })
 
 
-//更新笔记
+//更新笔记 
+//默认情况下，Mongoose 的 findByIdAndUpdate 和相关方法（如 findOneAndUpdate）不会运行验证器
 app.put('/api/notes/:id', (request, response, next) => {
   const body = request.body
 
@@ -109,12 +107,15 @@ app.put('/api/notes/:id', (request, response, next) => {
     important: body.important,
   }
 
-  Note.findByIdAndUpdate(request.params.id, note, { new: true })
-  //findByIdAndUpdate方法接收的是一个常规的JavaScript对象作为参数
-  
-  //默认情况下，事件处理器的updatedNote参数接收的是没有修改的原始文档。
-  //我们添加了可选的{ new: true }参数，
-  //这将导致我们的事件处理器被调用时，使用新的修改过的文档而不是原始文档。
+  Note.findByIdAndUpdate(request.params.id, note, { new: true, runValidators: true, context: 'query' })
+    //findByIdAndUpdate方法接收的是一个常规的JavaScript对象作为参数
+
+    //runValidators: true：启用验证器，确保更新操作符合模型定义的验证规则。
+    // context: 'query'：确保验证器能够正确运行。这是 Mongoose 的一个技术细节，通常需要与 runValidators 一起使用。
+
+    //默认情况下，事件处理器的updatedNote参数接收的是没有修改的原始文档。
+    //我们添加了可选的{ new: true }参数，
+    //这将导致我们的事件处理器被调用时，使用新的修改过的文档而不是原始文档。
     .then(updatedNote => {
       response.json(updatedNote)
       console.log('Updated note:', updatedNote)
@@ -137,8 +138,9 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
   }
-
   next(error)
 }
 
