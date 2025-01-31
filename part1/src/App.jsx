@@ -621,6 +621,15 @@ const App = () => {
             setMessage(null);
           }, 2000);
         })
+        .catch(error => {
+          setMessage(
+            `Error, the name should be at least 3 letters! 
+            Or is not a valid phone number! Format: XX-XXXXXX or XXX-XXXXXX`
+          )
+          setTimeout(() => {
+            setMessage(null);
+          }, 3000);
+        })
     }
   }
 
