@@ -1,12 +1,16 @@
 
 // info用于打印正常的日志信息
 const info = (...params) => {
-    console.log(...params)
+    if (process.env.NODE_ENV !== 'test') {
+        console.log(...params)
+    }
 }
 
 // error用于打印错误信息
 const error = (...params) => {
-    console.error(...params)
+    if (process.env.NODE_ENV !== 'test') {
+        console.error(...params)
+    }
 }
 
 module.exports = {
