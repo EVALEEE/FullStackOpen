@@ -1,5 +1,6 @@
 const config = require('./utils/config')
 const express = require('express')
+require('express-async-errors')//库处理了引擎盖下的一切。如果在async路由中发生异常，执行会自动传递给错误处理中间件
 const app = express()
 const cors = require('cors')
 const notesRouter = require('./controllers/notes')

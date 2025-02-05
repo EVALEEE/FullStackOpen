@@ -1,43 +1,42 @@
 
-const { test, after, beforeEach } = require('node:test')
+const { test, after, before, beforeEach } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
-const helper = require('./test_helper')
 const supertest = require('supertest')
 const app = require('../app')
-
-const Note = require('../models/note')
-
 const api = supertest(app)
 // 使用supertest包装Express应用(app)
 // 创建一个可以发送HTTP请求的测试客户端
 // 用于编写API测试
 
-console.log('start!')
+const helper = require('./test_helper')
 
-// before(async () => {
-//     console.log('Connecting to MongoDB...');
-//     await mongoose.connect('mongodb+srv://fullstack:Lv710115@cluster0.biysl.mongodb.net/testNoteApp?retryWrites=true&w=majority&appName=Cluster0', {
-//         useNewUrlParser: true,
-//         useUnifiedTopology: true,
-//         serverSelectionTimeoutMS: 5000, // 增加服务器选择超时时间
-//     });
-//     console.log('Connected to MongoDB');
-// });
+const Note = require('../models/note')
+
+console.log('start!')
+console.log('MONGODB_URI in test file:', process.env.MONGODB_URI);
+console.log('TEST_MONGODB_URI in test file:', process.env.TEST_MONGODB_URI);
+console.log('NODE_ENV in test file:', process.env.NODE_ENV);
 
 beforeEach(async () => {
     //数据库在开始时被清空，之后我们将存储在 initialNotes 数组中的两个笔记保存到数据库中。
     //这样做，我们确保数据库在每次测试运行前处于相同的状态。
     console.log('Clearing notes...');
-    await Note.deleteMany({}).maxTimeMS(30000);
+    await Note.deleteMany({});
     console.log('Notes cleared.');
-    let noteObject = new Note(helper.initialNotes[0])
-    console.log('First note saved.');
-    await noteObject.save()
-    noteObject = new Note(helper.initialNotes[1])
-    await noteObject.save()
-    console.log('Second note saved.');
+
+    // let noteObject = new Note(helper.initialNotes[0])
+    // await noteObject.save()
+    // noteObject = new Note(helper.initialNotes[1])
+    // await noteObject.save()
+
+    const noteObjects = helper.initialNotes
+        .map(note => new Note(note))
+    const promiseArray = noteObjects
+        .map(note => note.save())
+    await Promise.all(promiseArray)
 })
+
 
 test('notes are returned as json', async () => {
     //向 api/notes url 发出 HTTP GET 请求，并验证请求是否已使用状态代码 200 作出响应。
