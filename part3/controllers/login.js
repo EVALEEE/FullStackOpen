@@ -24,7 +24,14 @@ loginRouter.post('/', async (request, response) => {
         id: user._id,
     }
 
-    const token = jwt.sign(userForToken, process.env.SECRET)
+    // token expires in 60*60 seconds, that is, in one hour
+    //令牌过期后，客户端应用需要获取新令牌。
+    //通常，这是通过强制用户重新登录应用程序来实现的。
+    const token = jwt.sign(
+        userForToken,
+        process.env.SECRET,
+        { expiresIn: 60 * 60 }
+    )
     console.log(token)
 
     response
