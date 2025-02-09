@@ -4,6 +4,17 @@
 const notesRouter = require('express').Router()
 const Note = require('../models/note')
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+
+
+//辅助函数getTokenFrom将token从authorization头部分离出来
+const getTokenFrom = request => {
+    const authorization = request.get('authorization')
+    if (authorization && authorization.startsWith('Bearer ')) {
+        return authorization.replace('Bearer ', '')
+    }
+    return null
+}
 
 notesRouter.get('/', async (request, response) => {
     const notes = await Note.find({}).populate('user', { username: 1, name: 1 })
@@ -23,12 +34,21 @@ notesRouter.get('/:id', async (request, response) => {
 notesRouter.post('/', async (request, response) => {
     const body = request.body
 
-    const user = await User.findById(body.userId)
+    //jwt.verify检查token的有效性。该方法还解码token，或返回token基于的对象
+    //从token解码的对象包含username和id字段
+    const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+
+    if (!decodedToken.id) {
+        //从token解码的对象不包含用户的身份
+        return response.status(401).json({ error: 'token invalid' })
+    }
+
+    const user = await User.findById(decodedToken.id)
 
     const note = new Note({
         content: body.content,
-        important: body.important || false,
-        user: user.id
+        important: body.important === undefined ? false : body.important,
+        user: user._id
     })
 
     //使用了express-async-errors库，所以不需要try-catch块
