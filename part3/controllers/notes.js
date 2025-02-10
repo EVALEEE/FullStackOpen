@@ -9,8 +9,11 @@ const jwt = require('jsonwebtoken')
 
 //辅助函数getTokenFrom将token从authorization头部分离出来
 const getTokenFrom = request => {
+    console.log("start get token from request...")
     const authorization = request.get('authorization')
+    console.log("authorization", authorization)
     if (authorization && authorization.startsWith('Bearer ')) {
+        console.log("have authorization")
         return authorization.replace('Bearer ', '')
     }
     return null
@@ -32,11 +35,16 @@ notesRouter.get('/:id', async (request, response) => {
 })
 
 notesRouter.post('/', async (request, response) => {
+    console.log("start post note")
     const body = request.body
+    console.log("body", body)
 
+    console.log("start decode token...")
     //jwt.verify检查token的有效性。该方法还解码token，或返回token基于的对象
     //从token解码的对象包含username和id字段
     const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+
+    console.log("decodedToken:", decodedToken)
 
     if (!decodedToken.id) {
         //从token解码的对象不包含用户的身份

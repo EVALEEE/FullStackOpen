@@ -2,15 +2,30 @@ import axios from 'axios'
 const baseUrl = 'http://localhost:3001/api/notes'
 // const baseUrl = 'https://full-stack-open-backend.vercel.app/api/notes'
 
-const getAll = () => {
-    return axios.get(baseUrl)
-    //这块先不改
+let token = null
+
+const setToken = newToken => {
+    token = `Bearer ${newToken}`
+    console.log(token)
 }
 
-const create = newObject => {
-    //   return axios.post(baseUrl, newObject)
-    const request = axios.post(baseUrl, newObject)
+
+const getAll = () => {
+    // return axios.get(baseUrl)
+    // //这块先不改
+    const request = axios.get(baseUrl)
     return request.then(response => response.data)
+}
+
+const create = async newObject => {
+    console.log("start create note with axios")
+    const config = {
+        headers: { authorization: token }
+    }
+    console.log(config)
+    console.log(token)
+    const response = await axios.post(baseUrl, newObject, config)
+    return response.data
 }
 
 const update = (id, newObject) => {
@@ -27,7 +42,8 @@ export default {
     // 由于键的名字和分配的变量是一样的，我们可以用更紧凑的语法来写对象定义。
     getAll,
     create,
-    update
+    update,
+    setToken
 }
 // 该模块返回一个对象，该对象有三个函数（getAll、create和update）作为其属性，处理笔记。这些函数直接返回axios方法所返回的 promise 。
 
