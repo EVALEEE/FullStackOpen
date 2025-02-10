@@ -179,6 +179,15 @@ const App = () => {
   // 定义该组件的函数主体被执行，该组件被首次渲染。在这一点上，render 0 notes被打印出来，意味着数据还没有从服务器上获取
   // 对状态更新函数的调用会触发组件的重新渲染。结果，render 3 notes被打印到控制台，而从服务器上获取的笔记被渲染到屏幕上。
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      noteService.setToken(user.token)
+    }
+  }, [])
+
   const addNote = (event) => {
     event.preventDefault()
     const noteObject = {
@@ -240,8 +249,14 @@ const App = () => {
     event.preventDefault()
     try {
       const user = await loginService.login({ username, password })
+
+      window.localStorage.setItem(//将登录用户的详细信息保存在本地存储中
+        'loggedNoteappUser', JSON.stringify(user)
+      )
+
       noteService.setToken(user.token)
       setUser(user)
+
       setUsername('')
       setPassword('')
     } catch (exception) {
