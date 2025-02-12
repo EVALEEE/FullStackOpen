@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import axios from 'axios'
 import Note from './components/Note.jsx'
@@ -165,6 +165,8 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
+  const noteFormRef = useRef()
+
   //默认情况下，效果会在每次完成渲染后运行，但你可以选择只在某些值发生变化时启动它。
   useEffect(() => {
     console.log('effect')
@@ -190,6 +192,8 @@ const App = () => {
   }, [])
 
   const addNote = (noteObject) => {
+    noteFormRef.current.toggleVisibility()
+    //在创建一个新的笔记后，通过调用noteFormRef.current.toggleVisibility()来隐藏这个表单
     noteService
       .create(noteObject)
       .then(returnedNote => {
@@ -201,9 +205,7 @@ const App = () => {
       })
   }
 
-  const notesToShow = showAll
-    ? notes
-    : notes.filter(note => note.important === true)
+  const notesToShow = showAll ? notes : notes.filter(note => note.important === true)
 
   const toggleImportanceOf = (id) => {
     // const url = `http://localhost:3001/notes/${id}`
@@ -272,7 +274,7 @@ const App = () => {
   }
 
   const noteForm = () => (
-    <Togglable buttonLabel="new note">
+    <Togglable buttonLabel='new note' ref={noteFormRef}>
       <NoteForm createNote={addNote} />
     </Togglable>
   )
