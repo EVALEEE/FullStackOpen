@@ -159,8 +159,6 @@ const Footer = () => {
 
 const App = () => {
   const [notes, setNotes] = useState([])
-  //添加一个新的状态，叫做newNote，用来存储用户提交的输入，让我们把它设置为input元素的value属性
-  const [newNote, setNewNote] = useState('a new note...')
   const [showAll, setShowAll] = useState(true)//在App组件中添加一个状态，跟踪哪些笔记应该被显示
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
@@ -191,18 +189,11 @@ const App = () => {
     }
   }, [])
 
-  const addNote = (event) => {
-    event.preventDefault()
-    const noteObject = {
-      content: newNote,
-      important: false
-    }
-
+  const addNote = (noteObject) => {
     noteService
       .create(noteObject)
       .then(returnedNote => {
         setNotes(notes.concat(returnedNote))
-        setNewNote('')
         setErrorMessage('success!')
         setTimeout(() => {
           setErrorMessage(null)
@@ -210,19 +201,9 @@ const App = () => {
       })
   }
 
-  //为了实现对输入元素的编辑，我们必须注册一个事件处理程序，使输入元素的变化与组件的状态同步。
-  const handleNoteChange = (event) => {
-    console.log(event.target.value)
-    setNewNote(event.target.value)
-    // 事件对象的target属性现在对应于被控制的input元素，而event.target.value指的是该元素的输入值。
-  }
-
   const notesToShow = showAll
     ? notes
     : notes.filter(note => note.important === true)
-
-  { console.log('notes', notes) }
-  { console.log('notesToShow', notesToShow) }
 
   const toggleImportanceOf = (id) => {
     // const url = `http://localhost:3001/notes/${id}`
@@ -292,11 +273,7 @@ const App = () => {
 
   const noteForm = () => (
     <Togglable buttonLabel="new note">
-      <NoteForm
-        onSubmit={addNote}
-        value={newNote}
-        handleChange={handleNoteChange}
-      />
+      <NoteForm createNote={addNote} />
     </Togglable>
   )
 
