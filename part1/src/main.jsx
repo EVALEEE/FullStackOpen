@@ -4,23 +4,33 @@ import App from './App.jsx'
 import ReactDOM from 'react-dom/client'
 import { createStore } from 'redux'
 import cafeReducer from './reducers/cafeReducer'
-// import axios from 'axios'
+import axios from 'axios'
 
 // let counter = 1
 
 
+// =================  note app  =================
+ReactDOM.createRoot(document.getElementById('root')).render(<App />)
 
-// ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+// =================  cafe app  =================
+// const store = createStore(cafeReducer)
+// const root = ReactDOM.createRoot(document.getElementById('root'))
 
-const store = createStore(cafeReducer)
-const root = ReactDOM.createRoot(document.getElementById('root'))
+// const renderApp = () => {
+//     root.render(<App store={store} />)
+// }
 
-const renderApp = () => {
-    root.render(<App store={store} />)
-}
+// renderApp()
+// store.subscribe(renderApp)
 
-renderApp()
-store.subscribe(renderApp)
+
+
+
+
+
+
+
+
 
 
 // const promise = axios.get('http://localhost:3001/notes')
