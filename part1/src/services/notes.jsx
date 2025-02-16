@@ -6,13 +6,13 @@ let token = null
 
 const setToken = newToken => {
     token = `Bearer ${newToken}`
-    console.log(token)
+    console.log("start set new Token", token)
 }
 
 
 const getAll = () => {
     // return axios.get(baseUrl)
-    // //这块先不改
+    console.log("start get all notes with axios")
     const request = axios.get(baseUrl)
     return request.then(response => response.data)
 }
@@ -30,6 +30,7 @@ const create = async newObject => {
 
 const update = (id, newObject) => {
     // return axios.put(`${baseUrl}/${id}`, newObject)
+    console.log("start update note with axios")
     const request = axios.put(`${baseUrl}/${id}`, newObject)
     return request.then(response => response.data)
 }
