@@ -1,4 +1,3 @@
-// import { createStore } from 'redux'
 
 //Reducer 是一个纯函数，它的职责是根据当前的 state 和一个 action 
 //来计算并返回新的 state。它不关心 state 是如何被存储或管理的。
@@ -52,17 +51,3 @@ export default noteReducer;
 //         id: 2
 //     }
 // })
-
-// const App = () => {
-//     return (
-//         <div>
-//             <ul>
-//                 {store.getState().map(note =>
-//                     <li key={note.id}>
-//                         {note.content} <strong>{note.important ? 'important' : ''}</strong>
-//                     </li>
-//                 )}
-//             </ul>
-//         </div>
-//     )
-// }

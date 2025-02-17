@@ -15,6 +15,7 @@ import Togglable from './components/Togglable.jsx'
 import NoteForm from './components/NoteForm.jsx'
 import { createStore } from 'redux'
 import cafeReducer from './reducers/cafeReducer'
+import noteReducer from './reducers/noteReducer'
 
 
 // Practice 1.6 - 1.14:
@@ -171,6 +172,7 @@ const App = () => {
   const [user, setUser] = useState(null)
 
   const noteFormRef = useRef()
+  const store = createStore(noteReducer)
 
   //默认情况下，效果会在每次完成渲染后运行，但你可以选择只在某些值发生变化时启动它。
   useEffect(() => {
@@ -202,7 +204,15 @@ const App = () => {
     noteService
       .create(noteObject)
       .then(returnedNote => {
-        setNotes(notes.concat(returnedNote))
+        // setNotes(notes.concat(returnedNote))
+        store.dispatch({
+          type: 'NEW_NOTE',
+          data: {
+            content: returnedNote.content,
+            important: false,
+            id: returnedNote.id
+          }
+        })
         setErrorMessage('success!')
         setTimeout(() => {
           setErrorMessage(null)
@@ -210,7 +220,8 @@ const App = () => {
       })
   }
 
-  const notesToShow = showAll ? notes : notes.filter(note => note.important === true)
+  const notesToShow = showAll
+    ? notes : notes.filter(note => note.important === true)
 
   const toggleImportanceOf = (id) => {
     // const url = `http://localhost:3001/notes/${id}`
@@ -221,7 +232,11 @@ const App = () => {
     noteService
       .update(id, changedNote)
       .then(returnedNote => {
-        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
+        // setNotes(notes.map(note => note.id !== id ? note : returnedNote))
+        store.dispatch({
+          type: 'TOGGLE_IMPORTANCE',
+          data: { id }
+        })
         setErrorMessage('success!')
         setTimeout(() => {
           setErrorMessage(null)
@@ -305,7 +320,6 @@ const App = () => {
     <div>
       <h1>Notes</h1>
       <Notification message={errorMessage} />
-      {/* <button>log in</button> */}
       {user === null ? loginForm() :
         <div>
           <p>{user.username} logged-in</p>
