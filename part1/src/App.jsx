@@ -16,6 +16,8 @@ import NoteForm from './components/NoteForm.jsx'
 import { createStore } from 'redux'
 import cafeReducer from './reducers/cafeReducer'
 import noteReducer from './reducers/noteReducer'
+import { createNote, toggleImportance, removeNote, initializeNotes } from './reducers/noteReducer'
+import { useSelector, useDispatch } from 'react-redux'
 
 
 // Practice 1.6 - 1.14:
@@ -164,29 +166,28 @@ const Footer = () => {
 }
 
 const App = () => {
-  const [notes, setNotes] = useState([])
-  const [showAll, setShowAll] = useState(true)//在App组件中添加一个状态，跟踪哪些笔记应该被显示
+  const dispatch = useDispatch()
+  //useDispatch-hook为任何React组件提供了对index.js中定义的redux-store的dispatch-function的访问
+  //允许所有组件对redux-store的状态进行更改
+  const notes = useSelector(state => state) //我们需要所有的笔记，所以我们的选择器函数返回整个状态
+  const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
   const noteFormRef = useRef()
-  const store = createStore(noteReducer)
 
-  //默认情况下，效果会在每次完成渲染后运行，但你可以选择只在某些值发生变化时启动它。
+  //默认情况下，效果会在每次完成渲染后运行
   useEffect(() => {
     console.log('effect')
     axios
       .get('http://localhost:3001/api/notes')
       .then(response => {
         console.log('promise fulfilled')
-        setNotes(response.data)
+        dispatch(initializeNotes(response.data))
       })
   }, [])
-  // useEffect的第二个参数用于指定效果的运行频率。如果第二个参数是一个空的数组[]，那么效果就只在组件的第一次渲染时运行。
-  // 定义该组件的函数主体被执行，该组件被首次渲染。在这一点上，render 0 notes被打印出来，意味着数据还没有从服务器上获取
-  // 对状态更新函数的调用会触发组件的重新渲染。结果，render 3 notes被打印到控制台，而从服务器上获取的笔记被渲染到屏幕上。
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
@@ -198,20 +199,11 @@ const App = () => {
   }, [])
 
   const addNote = (noteObject) => {
-    noteFormRef.current.toggleVisibility()
-    //在创建一个新的笔记后，通过调用noteFormRef.current.toggleVisibility()来隐藏这个表单
+    noteFormRef.current.toggleVisibility() //在创建一个新的笔记后，通过调用noteFormRef.current.toggleVisibility()来隐藏这个表单
     noteService
       .create(noteObject)
       .then(returnedNote => {
-        // setNotes(notes.concat(returnedNote))
-        store.dispatch({
-          type: 'NEW_NOTE',
-          data: {
-            content: returnedNote.content,
-            important: false,
-            id: returnedNote.id
-          }
-        })
+        dispatch(createNote(returnedNote.content, returnedNote.id))
         setErrorMessage('success!')
         setTimeout(() => {
           setErrorMessage(null)
@@ -223,19 +215,13 @@ const App = () => {
     ? notes : notes.filter(note => note.important === true)
 
   const toggleImportanceOf = (id) => {
-    // const url = `http://localhost:3001/notes/${id}`
     const note = notes.find(n => n.id === id)
     const changedNote = { ...note, important: !note.important }
-    //{ ...note }创建了一个新的对象，并复制了note对象的所有属性, 同时新对象的important属性到了它在原始对象中先前值的否定
 
     noteService
       .update(id, changedNote)
       .then(returnedNote => {
-        // setNotes(notes.map(note => note.id !== id ? note : returnedNote))
-        store.dispatch({
-          type: 'TOGGLE_IMPORTANCE',
-          data: { id }
-        })
+        dispatch(toggleImportance(id))
         setErrorMessage('success!')
         setTimeout(() => {
           setErrorMessage(null)
@@ -246,7 +232,7 @@ const App = () => {
         setTimeout(() => {
           setErrorMessage(null)
         }, 3000)
-        setNotes(notes.filter(n => n.id != id))//删除的笔记会从状态中被过滤掉
+        dispatch(removeNote(id))
       })
   }
 

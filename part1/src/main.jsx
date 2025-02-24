@@ -5,12 +5,21 @@ import ReactDOM from 'react-dom/client'
 import { createStore } from 'redux'
 import cafeReducer from './reducers/cafeReducer'
 import axios from 'axios'
+import { Provider } from 'react-redux'
+import noteReducer from './reducers/noteReducer'
 
 // let counter = 1
 
 
 // =================  note app  =================
-ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+// ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+
+const store = createStore(noteReducer)
+//应用现在被定义为由react redux库提供的Provider-组件的一个子组件
+//应用的存储被赋予给Provider，作为其属性
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <Provider store={store}><App /></Provider>
+)
 
 // =================  cafe app  =================
 // const store = createStore(cafeReducer)

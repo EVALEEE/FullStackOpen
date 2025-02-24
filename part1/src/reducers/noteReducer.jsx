@@ -1,10 +1,15 @@
 
 //Reducer 是一个纯函数，它的职责是根据当前的 state 和一个 action 
 //来计算并返回新的 state。它不关心 state 是如何被存储或管理的。
-const noteReducer = (state = [], action) => {
+const initialState = []
+const noteReducer = (state = initialState, action) => {
     switch (action.type) {
+        case 'INIT_NOTES':
+            return action.data
         case 'NEW_NOTE':
             return [...state, action.data]
+        case 'REMOVE_NOTE':
+            return state.filter(note => note.id !== action.data.id)
         case 'TOGGLE_IMPORTANCE': {
             const id = action.data.id
             const noteToChange = state.find(n => n.id === id)
@@ -18,6 +23,38 @@ const noteReducer = (state = [], action) => {
         }
         default:
             return state
+    }
+}
+
+export const createNote = (content, id) => {
+    return {
+        type: 'NEW_NOTE',
+        data: {
+            content,
+            important: false,
+            id
+        }
+    }
+}
+
+export const toggleImportance = (id) => {
+    return {
+        type: 'TOGGLE_IMPORTANCE',
+        data: { id }
+    }
+}
+
+export const initializeNotes = (notes) => {
+    return {
+        type: 'INIT_NOTES',
+        data: notes
+    }
+}
+
+export const removeNote = (id) => {
+    return {
+        type: 'REMOVE_NOTE',
+        data: { id }
     }
 }
 
