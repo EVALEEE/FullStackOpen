@@ -18,6 +18,8 @@ import cafeReducer from './reducers/cafeReducer'
 import noteReducer from './reducers/noteReducer'
 import { createNote, toggleImportance, removeNote, initializeNotes } from './reducers/noteReducer'
 import { useSelector, useDispatch } from 'react-redux'
+import Button from './components/Button.jsx'
+import AnecdoteList from './components/AnecdoteList.jsx'
 
 
 // Practice 1.6 - 1.14:
@@ -25,298 +27,256 @@ import { useSelector, useDispatch } from 'react-redux'
 //反馈只有三个选项。好，中立，和坏。
 //应用必须显示每个类别收集到的反馈的总数。
 
-// const Statistics = ({ good, bad, neutral }) => {
-//   if (good === 0 && neutral === 0 && bad === 0) {
-//     return (
-//       <div>
-//         <h1>Statistics</h1>
-//         <p>No feedback given</p>
-//       </div>
-//     )
-//   }
-//   return (
-//     <div>
-//       <h1>Statistics</h1>
-//       <div>
-//         <table>
-//           <tbody>
-//             <StatisticLine text='good' value={good} />
-//             <StatisticLine text='neutral' value={neutral} />
-//             <StatisticLine text='bad' value={bad} />
-//             <StatisticLine text='all' value={good + neutral + bad} />
-//             <StatisticLine text='average' value={(good - bad) / (good + neutral + bad)} />
-//             <StatisticLine text='positive' value={good / (good + neutral + bad) * 100 + '%'} />
-//           </tbody>
-//         </table>
-//       </div>
-//     </div>
-//   )
-// }
-// const Button = ({ handleClick, text }) => (
-//   <button onClick={handleClick}>
-//     {text}
-//   </button>
-// )
-
-// const StatisticLine = ({ text, value }) => {
-//   return (
-//     <tr>
-//       <td>{text}</td>
-//       <td>{value}</td>
-//     </tr>
-//   )
-// }
-
-// const App = ({ store }) => {
-//   const [selected, setSelected] = useState(0)
-//   const [counts, setCounts] = useState([0, 0, 0, 0, 0, 0, 0])
-//   const anecdotes = [
-//     'If it hurts, do it more often',
-//     'Adding manpower to a late software project makes it later!',
-//     'The first 90 percent of the code accounts for the first 10 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
-//     'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
-//     'Premature optimization is the root of all evil.',
-//     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
-//     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients'
-//   ]
-
-//   console.log(counts)
-
-//   const handleGoodClick = () => {
-//     store.dispatch({
-//       type: 'GOOD'
-//     })
-//   }
-
-//   const handleNeutralClick = () => {
-//     store.dispatch({
-//       type: 'NEUTRAL'
-//     })
-//   }
-
-//   const handleBadClick = () => {
-//     store.dispatch({
-//       type: 'BAD'
-//     })
-//   }
-
-//   //该按钮可以被点击来显示一个随机软件工程领域的名言警句
-//   const handleNextClick = () => {
-//     setSelected(Math.floor(Math.random() * anecdotes.length))
-//   }
-
-//   const handleVote = () => {
-//     const copy = [...counts]
-//     copy[selected] += 1
-//     setCounts(copy)
-//     console.log(counts)
-//   }
-
-//   //扩展你的应用，使其显示更多关于收集到的反馈的统计数据：收集到的反馈总数、平均分数（好：1，中性：0，坏：-1）和积极反馈的百分比。
-//   return (
-//     <div>
-//       <h1>Give Feedback</h1>
-//       <div className="button-container">
-//         <Button handleClick={handleGoodClick} text='good' />
-//         <Button handleClick={handleNeutralClick} text='neutral' />
-//         <Button handleClick={handleBadClick} text='bad' />
-//       </div>
-//       <div>
-//         <Statistics good={store.getState().good}
-//           neutral={store.getState().ok}
-//           bad={store.getState().bad} />
-//       </div>
-//       <div className='card'>
-//         "{anecdotes[selected]}"
-//       </div>
-//       <div>
-//         <p>has {counts[selected]} votes</p>
-//       </div>
-//       <div className="button-container">
-//         <Button handleClick={handleNextClick} text='anecdotes' />
-//         <Button handleClick={handleVote} text='vote' />
-//       </div>
-//       <div>
-//         {/* 显示拥有最大票数的名言警句 */}
-//         <h1>Anecdote with most votes</h1>
-//         <p>{anecdotes[counts.indexOf(Math.max(...counts))]}</p>
-//       </div>
-//     </div>
-//   )
-// }
-
-// ========================================
-// Notes App:
-
-const Footer = () => {
-  // 构成应用功能实体的结构单元是React组件。一个React组件定义了构造内容的HTML，
-  // 决定功能的JavaScript函数，以及组件的样式；所有这些都在一个地方。
-  // 这是为了创建尽可能独立和可重复使用的单个组件。
-  const footerStyle = {
-    color: 'green',
-    fontStyle: 'italic',
-    fontSize: 16
+const Statistics = ({ good, bad, neutral }) => {
+  if (good === 0 && neutral === 0 && bad === 0) {
+    return (
+      <div>
+        <h1>Statistics</h1>
+        <p>No feedback given</p>
+      </div>
+    )
   }
   return (
-    <div style={footerStyle}>
-      <br />
-      <em>Note app, Department of Computer Science, University of Helsinki 2022</em>
+    <div>
+      <h1>Statistics</h1>
+      <div>
+        <table>
+          <tbody>
+            <StatisticLine text='good' value={good} />
+            <StatisticLine text='neutral' value={neutral} />
+            <StatisticLine text='bad' value={bad} />
+            <StatisticLine text='all' value={good + neutral + bad} />
+            <StatisticLine text='average' value={(good - bad) / (good + neutral + bad)} />
+            <StatisticLine text='positive' value={good / (good + neutral + bad) * 100 + '%'} />
+          </tbody>
+        </table>
+      </div>
     </div>
+  )
+}
+
+const StatisticLine = ({ text, value }) => {
+  return (
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
   )
 }
 
 const App = () => {
   const dispatch = useDispatch()
-  //useDispatch-hook为任何React组件提供了对index.js中定义的redux-store的dispatch-function的访问
-  //允许所有组件对redux-store的状态进行更改
-  const notes = useSelector(state => state) //我们需要所有的笔记，所以我们的选择器函数返回整个状态
-  const [showAll, setShowAll] = useState(true)
-  const [errorMessage, setErrorMessage] = useState(null)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
-
-  const noteFormRef = useRef()
-
-  //默认情况下，效果会在每次完成渲染后运行
-  useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/api/notes')
-      .then(response => {
-        console.log('promise fulfilled')
-        dispatch(initializeNotes(response.data))
-      })
-  }, [])
-
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      noteService.setToken(user.token)
-    }
-  }, [])
-
-  const addNote = (noteObject) => {
-    noteFormRef.current.toggleVisibility() //在创建一个新的笔记后，通过调用noteFormRef.current.toggleVisibility()来隐藏这个表单
-    noteService
-      .create(noteObject)
-      .then(returnedNote => {
-        dispatch(createNote(returnedNote.content, returnedNote.id))
-        setErrorMessage('success!')
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 1000)
-      })
+  const good = useSelector(state => state.good)
+  const neutral = useSelector(state => state.ok)
+  const bad = useSelector(state => state.bad)
+  const handleGoodClick = () => {
+    dispatch({
+      type: 'GOOD'
+    })
   }
 
-  const notesToShow = showAll
-    ? notes : notes.filter(note => note.important === true)
-
-  const toggleImportanceOf = (id) => {
-    const note = notes.find(n => n.id === id)
-    const changedNote = { ...note, important: !note.important }
-
-    noteService
-      .update(id, changedNote)
-      .then(returnedNote => {
-        dispatch(toggleImportance(id))
-        setErrorMessage('success!')
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 3000)
-      })
-      .catch(error => {
-        setErrorMessage(`Error: Note '${note.content}' was already removed from server`)
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 3000)
-        dispatch(removeNote(id))
-      })
+  const handleNeutralClick = () => {
+    dispatch({
+      type: 'NEUTRAL'
+    })
   }
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-    try {
-      const user = await loginService.login({ username, password })
-
-      window.localStorage.setItem(//将登录用户的详细信息保存在本地存储中
-        'loggedNoteappUser', JSON.stringify(user)
-      )
-
-      noteService.setToken(user.token)
-      setUser(user)
-
-      setUsername('')
-      setPassword('')
-    } catch (exception) {
-      setErrorMessage('Error: Wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 3000)
-    }
+  const handleBadClick = () => {
+    dispatch({
+      type: 'BAD'
+    })
   }
-
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedNoteappUser')
-    noteService.setToken(null)
-    setUser(null)
-  }
-
-  const loginForm = () => {
-    return (
-      < Togglable buttonLabel='log in' >
-        <LoginForm
-          username={username}
-          password={password}
-          handleUsernameChange={({ target }) => setUsername(target.value)}
-          handlePasswordChange={({ target }) => setPassword(target.value)}
-          handleSubmit={handleLogin}
-        />
-      </Togglable >
-    )
-  }
-
-  const noteForm = () => (
-    <Togglable buttonLabel='new note' ref={noteFormRef}>
-      <NoteForm createNote={addNote} />
-    </Togglable>
-  )
-
-  const noteList = () => (
-    <div>
-      <div>
-        <button onClick={() => setShowAll(!showAll)}> show {showAll ? 'important' : 'all'}</button>
-      </div>
-      <ul>
-        {notesToShow.map(note =>
-          <Note
-            key={note.id}
-            note={note}
-            toggleImportance={() => toggleImportanceOf(note.id)}
-          />
-        )}
-      </ul>
-    </div>
-  )
 
   return (
     <div>
-      <h1>Notes</h1>
-      <Notification message={errorMessage} />
-      {user === null ? loginForm() :
-        <div>
-          <p>{user.username} logged-in</p>
-          {noteForm()}
-          {noteList()}
-          <button onClick={handleLogout}>logout</button>
-        </div>
-      }
-      <Footer />
+      <h1>Give Feedback</h1>
+      <div className="button-container">
+        <Button handleClick={handleGoodClick} text='good' />
+        <Button handleClick={handleNeutralClick} text='neutral' />
+        <Button handleClick={handleBadClick} text='bad' />
+      </div>
+      <div>
+        <Statistics good={good}
+          neutral={neutral}
+          bad={bad} />
+      </div>
+      <AnecdoteList/>
     </div>
   )
 }
+
+// ========================================
+// Notes App:
+
+// const Footer = () => {
+//   // 构成应用功能实体的结构单元是React组件。一个React组件定义了构造内容的HTML，
+//   // 决定功能的JavaScript函数，以及组件的样式；所有这些都在一个地方。
+//   // 这是为了创建尽可能独立和可重复使用的单个组件。
+//   const footerStyle = {
+//     color: 'green',
+//     fontStyle: 'italic',
+//     fontSize: 16
+//   }
+//   return (
+//     <div style={footerStyle}>
+//       <br />
+//       <em>Note app, Department of Computer Science, University of Helsinki 2022</em>
+//     </div>
+//   )
+// }
+
+// const App = () => {
+//   const dispatch = useDispatch()
+//   //useDispatch-hook为任何React组件提供了对index.js中定义的redux-store的dispatch-function的访问
+//   //允许所有组件对redux-store的状态进行更改
+//   const notes = useSelector(state => state) //我们需要所有的笔记，所以我们的选择器函数返回整个状态
+//   const [showAll, setShowAll] = useState(true)
+//   const [errorMessage, setErrorMessage] = useState(null)
+//   const [username, setUsername] = useState('')
+//   const [password, setPassword] = useState('')
+//   const [user, setUser] = useState(null)
+
+//   const noteFormRef = useRef()
+
+//   //默认情况下，效果会在每次完成渲染后运行
+//   useEffect(() => {
+//     console.log('effect')
+//     axios
+//       .get('http://localhost:3001/api/notes')
+//       .then(response => {
+//         console.log('promise fulfilled')
+//         dispatch(initializeNotes(response.data))
+//       })
+//   }, [])
+
+//   useEffect(() => {
+//     const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+//     if (loggedUserJSON) {
+//       const user = JSON.parse(loggedUserJSON)
+//       setUser(user)
+//       noteService.setToken(user.token)
+//     }
+//   }, [])
+
+//   const addNote = (noteObject) => {
+//     noteFormRef.current.toggleVisibility() //在创建一个新的笔记后，通过调用noteFormRef.current.toggleVisibility()来隐藏这个表单
+//     noteService
+//       .create(noteObject)
+//       .then(returnedNote => {
+//         dispatch(createNote(returnedNote.content, returnedNote.id))
+//         setErrorMessage('success!')
+//         setTimeout(() => {
+//           setErrorMessage(null)
+//         }, 1000)
+//       })
+//   }
+
+//   const notesToShow = showAll
+//     ? notes : notes.filter(note => note.important === true)
+
+//   const toggleImportanceOf = (id) => {
+//     const note = notes.find(n => n.id === id)
+//     const changedNote = { ...note, important: !note.important }
+
+//     noteService
+//       .update(id, changedNote)
+//       .then(returnedNote => {
+//         dispatch(toggleImportance(id))
+//         setErrorMessage('success!')
+//         setTimeout(() => {
+//           setErrorMessage(null)
+//         }, 3000)
+//       })
+//       .catch(error => {
+//         setErrorMessage(`Error: Note '${note.content}' was already removed from server`)
+//         setTimeout(() => {
+//           setErrorMessage(null)
+//         }, 3000)
+//         dispatch(removeNote(id))
+//       })
+//   }
+
+//   const handleLogin = async (event) => {
+//     event.preventDefault()
+//     try {
+//       const user = await loginService.login({ username, password })
+
+//       window.localStorage.setItem(//将登录用户的详细信息保存在本地存储中
+//         'loggedNoteappUser', JSON.stringify(user)
+//       )
+
+//       noteService.setToken(user.token)
+//       setUser(user)
+
+//       setUsername('')
+//       setPassword('')
+//     } catch (exception) {
+//       setErrorMessage('Error: Wrong credentials')
+//       setTimeout(() => {
+//         setErrorMessage(null)
+//       }, 3000)
+//     }
+//   }
+
+//   const handleLogout = () => {
+//     window.localStorage.removeItem('loggedNoteappUser')
+//     noteService.setToken(null)
+//     setUser(null)
+//   }
+
+//   const loginForm = () => {
+//     return (
+//       < Togglable buttonLabel='log in' >
+//         <LoginForm
+//           username={username}
+//           password={password}
+//           handleUsernameChange={({ target }) => setUsername(target.value)}
+//           handlePasswordChange={({ target }) => setPassword(target.value)}
+//           handleSubmit={handleLogin}
+//         />
+//       </Togglable >
+//     )
+//   }
+
+//   const noteForm = () => (
+//     <Togglable buttonLabel='new note' ref={noteFormRef}>
+//       <NoteForm createNote={addNote} />
+//     </Togglable>
+//   )
+
+//   const noteList = () => (
+//     <div>
+//       <div>
+//         <button onClick={() => setShowAll(!showAll)}> show {showAll ? 'important' : 'all'}</button>
+//       </div>
+//       <ul>
+//         {notesToShow.map(note =>
+//           <Note
+//             key={note.id}
+//             note={note}
+//             toggleImportance={() => toggleImportanceOf(note.id)}
+//           />
+//         )}
+//       </ul>
+//     </div>
+//   )
+
+//   return (
+//     <div>
+//       <h1>Notes</h1>
+//       <Notification message={errorMessage} />
+//       {user === null ? loginForm() :
+//         <div>
+//           <p>{user.username} logged-in</p>
+//           {noteForm()}
+//           {noteList()}
+//           <button onClick={handleLogout}>logout</button>
+//         </div>
+//       }
+//       <Footer />
+//     </div>
+//   )
+// }
 
 // ========================================
 
