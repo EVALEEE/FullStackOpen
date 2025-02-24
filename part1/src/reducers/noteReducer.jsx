@@ -1,6 +1,6 @@
 
 //Reducer 是一个纯函数，它的职责是根据当前的 state 和一个 action 
-//来计算并返回新的 state。它不关心 state 是如何被存储或管理的。
+//来计算并返回新的 state。它不关心 state 是如何被存储或管理的
 const initialState = []
 const noteReducer = (state = initialState, action) => {
     switch (action.type) {

@@ -7,6 +7,7 @@ import cafeReducer from './reducers/cafeReducer'
 import axios from 'axios'
 import { Provider } from 'react-redux'
 import noteReducer from './reducers/noteReducer'
+import { configureStore } from '@reduxjs/toolkit'
 
 // let counter = 1
 
@@ -14,27 +15,29 @@ import noteReducer from './reducers/noteReducer'
 // =================  note app  =================
 // ReactDOM.createRoot(document.getElementById('root')).render(<App />)
 
-// const store = createStore(noteReducer)
-// //应用现在被定义为由react redux库提供的Provider-组件的一个子组件
-// //应用的存储被赋予给Provider，作为其属性
-// ReactDOM.createRoot(document.getElementById('root')).render(
-//     <Provider store={store}><App /></Provider>
-// )
+const store = configureStore({ reducer: noteReducer })
+//应用现在被定义为由react redux库提供的Provider-组件的一个子组件
+//应用的存储被赋予给Provider，作为其属性
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <Provider store={store}><App /></Provider>
+)
 
 // =================  cafe app  =================
-const store = createStore(cafeReducer)
-const root = ReactDOM.createRoot(document.getElementById('root'))
+// const store = createStore(cafeReducer)
+// const root = ReactDOM.createRoot(document.getElementById('root'))
 
-const renderApp = () => {
-    root.render(
-        <Provider store={store}>
-            <App/>
-        </Provider>
-    )
-}
+// const renderApp = () => {
+//     root.render(
+//         <Provider store={store}>
+//             <App/>
+//         </Provider>
+//         //wrapping it in a Provider component that passes the Redux store to the rest of the app
+//     )
+// }
 
-renderApp()
-store.subscribe(renderApp)
+// renderApp() 
+// store.subscribe(renderApp)
+// to ensure that the application re-renders whenever the state in the Redux store changes.
 
 
 

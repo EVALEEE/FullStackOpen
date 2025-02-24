@@ -15,6 +15,7 @@
     "test:e2e": "cypress run"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.6.0",
     "axios": "^1.7.9",
     "jsdom": "^26.0.0",
     "prop-types": "^15.8.1",
