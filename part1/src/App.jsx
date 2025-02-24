@@ -179,7 +179,6 @@ const App = () => {
     console.log('effect')
     axios
       .get('http://localhost:3001/api/notes')
-      // .get('https://full-stack-open-backend.vercel.app/api/notes')
       .then(response => {
         console.log('promise fulfilled')
         setNotes(response.data)
