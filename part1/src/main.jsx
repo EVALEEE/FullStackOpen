@@ -16,7 +16,30 @@ import notificationReducer from './reducers/notificationReducer'
 
 //== ==
 
-// const store = configureStore({ reducer: noteReducer })
+const store = configureStore({ reducer: noteReducer })
+const root = ReactDOM.createRoot(document.getElementById('root'))
+
+const renderApp = () => {
+    root.render(
+        <Provider store={store}>
+            <App />
+        </Provider>
+    )
+}
+renderApp()
+store.subscribe(renderApp)
+
+// =================  cafe app  =================
+
+// const store = configureStore({
+//     reducer: {
+//         cafe: cafeReducer,
+//         notification: notificationReducer
+//     }
+// })
+
+// console.log('state:',store.getState())
+
 // const root = ReactDOM.createRoot(document.getElementById('root'))
 
 // const renderApp = () => {
@@ -29,35 +52,6 @@ import notificationReducer from './reducers/notificationReducer'
 
 // renderApp()
 // store.subscribe(renderApp)
-//应用现在被定义为由react redux库提供的Provider-组件的一个子组件
-// ReactDOM.createRoot(document.getElementById('root')).render(
-//     <Provider store={store}><App /></Provider>
-// )
-
-// =================  cafe app  =================
-
-const store = configureStore({
-    reducer: {
-        cafe: cafeReducer,
-        notification: notificationReducer
-    }
-})
-
-console.log('state:',store.getState())
-
-const root = ReactDOM.createRoot(document.getElementById('root'))
-
-const renderApp = () => {
-    root.render(
-        <Provider store={store}>
-            <App />
-        </Provider>
-    )
-}
-
-renderApp()
-store.subscribe(renderApp)
-// to ensure that the application re-renders whenever the state in the Redux store changes.
 
 
 
