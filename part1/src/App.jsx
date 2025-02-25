@@ -21,9 +21,10 @@ import Button from './components/Button.jsx'
 import AnecdoteList from './components/AnecdoteList.jsx'
 import { incrementGood, incrementNeutral, incrementBad } from './reducers/cafeReducer'
 import { setNotification } from './reducers/notificationReducer'
+import { setNotificationWithTimeout } from './reducers/notificationReducer'
+
 
 //Unicafe:
-
 const Statistics = ({ good, bad, neutral }) => {
   if (good === 0 && neutral === 0 && bad === 0) {
     return (
@@ -83,17 +84,17 @@ const App = () => {
 
   const handleGoodClick = () => {
     dispatch(incrementGood())
-    dispatch(setNotification('Good feedback received!'))
+    dispatch(setNotificationWithTimeout('Good feedback received!'))
   }
 
   const handleNeutralClick = () => {
     dispatch(incrementNeutral())
-    dispatch(setNotification('Neutral feedback received!'))
+    dispatch(setNotificationWithTimeout('Neutral feedback received!'))
   }
 
   const handleBadClick = () => {
     dispatch(incrementBad())
-    dispatch(setNotification('Bad feedback received!'))
+    dispatch(setNotificationWithTimeout('Bad feedback received!'))
   }
 
   return (
@@ -106,9 +107,7 @@ const App = () => {
         <Button handleClick={handleBadClick} text='bad' />
       </div>
       <div>
-        <Statistics good={good}
-          neutral={neutral}
-          bad={bad} />
+        <Statistics good={good} neutral={neutral} bad={bad} />
       </div>
       <AnecdoteList />
     </div>

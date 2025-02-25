@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Button from './Button'
 import { setCounts, setSelected } from '../reducers/cafeReducer'
+import { setNotificationWithTimeout } from '../reducers/notificationReducer'
 
 
 const AnecdoteList = () => {
@@ -21,10 +22,12 @@ const AnecdoteList = () => {
 
     const handleNextClick = () => {
         dispatch(setSelected(Math.floor(Math.random() * anecdotes.length)))
+        dispatch(setNotificationWithTimeout('Next Anecdote!'))
     }
 
     const handleVote = () => {
         dispatch(setCounts(selected))
+        dispatch(setNotificationWithTimeout('You voted!'))
     }
 
     return (
