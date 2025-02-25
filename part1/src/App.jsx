@@ -151,11 +151,12 @@ const App = () => {
 
   //默认情况下，效果会在每次完成渲染后运行
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/api/notes')
+    noteService
+      .getAll()
       .then(response => {
         console.log('promise fulfilled')
-        dispatch(initializeNotes(response.data))
+        console.log('response:', response)
+        dispatch(initializeNotes(response))
       })
   }, [])
 
