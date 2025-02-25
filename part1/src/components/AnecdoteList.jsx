@@ -16,8 +16,8 @@ const AnecdoteList = () => {
     ]
 
     const dispatch = useDispatch()
-    const counts = useSelector(state => state.counts)
-    const selected = useSelector(state => state.selected)
+    const counts = useSelector(state => state.cafe.counts)
+    const selected = useSelector(state => state.cafe.selected)
 
     const handleNextClick = () => {
         dispatch(setSelected(Math.floor(Math.random() * anecdotes.length)))

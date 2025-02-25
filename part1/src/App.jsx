@@ -20,9 +20,10 @@ import { useSelector, useDispatch } from 'react-redux'
 import Button from './components/Button.jsx'
 import AnecdoteList from './components/AnecdoteList.jsx'
 import { incrementGood, incrementNeutral, incrementBad } from './reducers/cafeReducer'
-
+import { setNotification } from './reducers/notificationReducer'
 
 //Unicafe:
+
 const Statistics = ({ good, bad, neutral }) => {
   if (good === 0 && neutral === 0 && bad === 0) {
     return (
@@ -60,27 +61,45 @@ const StatisticLine = ({ text, value }) => {
   )
 }
 
+const CafeNotification = () => {
+  const notification = useSelector(state => state.notification)
+  const style = {
+    border: 'solid',
+    padding: 10,
+    borderWidth: 1
+  }
+  return (
+    <div style={style}>
+      {notification}
+    </div>
+  )
+}
+
 const App = () => {
   const dispatch = useDispatch()
-  const good = useSelector(state => state.good)
-  const neutral = useSelector(state => state.neutral)
-  const bad = useSelector(state => state.bad)
+  const good = useSelector(state => state.cafe.good)
+  const neutral = useSelector(state => state.cafe.neutral)
+  const bad = useSelector(state => state.cafe.bad)
 
   const handleGoodClick = () => {
     dispatch(incrementGood())
+    dispatch(setNotification('Good feedback received!'))
   }
 
   const handleNeutralClick = () => {
     dispatch(incrementNeutral())
+    dispatch(setNotification('Neutral feedback received!'))
   }
 
   const handleBadClick = () => {
     dispatch(incrementBad())
+    dispatch(setNotification('Bad feedback received!'))
   }
 
   return (
     <div>
       <h1>Give Feedback</h1>
+      <CafeNotification />
       <div className="button-container">
         <Button handleClick={handleGoodClick} text='good' />
         <Button handleClick={handleNeutralClick} text='neutral' />

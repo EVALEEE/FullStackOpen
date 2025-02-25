@@ -8,6 +8,7 @@ import axios from 'axios'
 import { Provider } from 'react-redux'
 import noteReducer from './reducers/noteReducer'
 import { configureStore } from '@reduxjs/toolkit'
+import notificationReducer from './reducers/notificationReducer'
 
 
 // =================  note app  =================
@@ -34,7 +35,16 @@ import { configureStore } from '@reduxjs/toolkit'
 // )
 
 // =================  cafe app  =================
-const store = configureStore({ reducer: cafeReducer })
+
+const store = configureStore({
+    reducer: {
+        cafe: cafeReducer,
+        notification: notificationReducer
+    }
+})
+
+console.log('state:',store.getState())
+
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 const renderApp = () => {
