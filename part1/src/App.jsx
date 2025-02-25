@@ -15,8 +15,7 @@ import Togglable from './components/Togglable.jsx'
 import NoteForm from './components/NoteForm.jsx'
 import { createStore } from 'redux'
 import cafeReducer from './reducers/cafeReducer'
-import noteReducer from './reducers/noteReducer'
-import { createNote, toggleImportance, removeNote, initializeNotes } from './reducers/noteReducer'
+import noteReducer, { createNote, toggleImportance, removeNote, initializeNotes } from './reducers/noteReducer'
 import { useSelector, useDispatch } from 'react-redux'
 import Button from './components/Button.jsx'
 import AnecdoteList from './components/AnecdoteList.jsx'
@@ -127,9 +126,11 @@ const Footer = () => {
 
 const App = () => {
   const dispatch = useDispatch()
-  //useDispatch-hook为任何React组件提供了对index.js中定义的redux-store的dispatch-function的访问
-  //允许所有组件对redux-store的状态进行更改
-  const notes = useSelector(state => state) //我们需要所有的笔记，所以我们的选择器函数返回整个状态
+  const notes = useSelector(state => {
+    console.log('state:', state); // 打印 state
+    return state;
+  });
+
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
@@ -159,11 +160,17 @@ const App = () => {
   }, [])
 
   const addNote = (noteObject) => {
-    noteFormRef.current.toggleVisibility() //在创建一个新的笔记后，通过调用noteFormRef.current.toggleVisibility()来隐藏这个表单
+    noteFormRef.current.toggleVisibility()
+    //在创建一个新的笔记后，通过调用noteFormRef.current.toggleVisibility()来隐藏这个表单
+
     noteService
       .create(noteObject)
       .then(returnedNote => {
-        dispatch(createNote(returnedNote.content, returnedNote.id))
+        console.log('returnedNote:', returnedNote)
+        dispatch(createNote({
+          content: returnedNote.content,
+          id: returnedNote.id
+        }))
         setErrorMessage('success!')
         setTimeout(() => {
           setErrorMessage(null)
@@ -173,6 +180,8 @@ const App = () => {
 
   const notesToShow = showAll
     ? notes : notes.filter(note => note.important === true)
+
+  console.log('notesToShow:', notesToShow)
 
   const toggleImportanceOf = (id) => {
     const note = notes.find(n => n.id === id)

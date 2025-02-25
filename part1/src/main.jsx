@@ -9,18 +9,27 @@ import { Provider } from 'react-redux'
 import noteReducer from './reducers/noteReducer'
 import { configureStore } from '@reduxjs/toolkit'
 
-// let counter = 1
-
 
 // =================  note app  =================
 // ReactDOM.createRoot(document.getElementById('root')).render(<App />)
 
 const store = configureStore({ reducer: noteReducer })
+const root = ReactDOM.createRoot(document.getElementById('root'))
+
+const renderApp = () => {
+    root.render(
+        <Provider store={store}>
+            <App />
+        </Provider>
+    )
+}
+
+renderApp()
+store.subscribe(renderApp)
 //应用现在被定义为由react redux库提供的Provider-组件的一个子组件
-//应用的存储被赋予给Provider，作为其属性
-ReactDOM.createRoot(document.getElementById('root')).render(
-    <Provider store={store}><App /></Provider>
-)
+// ReactDOM.createRoot(document.getElementById('root')).render(
+//     <Provider store={store}><App /></Provider>
+// )
 
 // =================  cafe app  =================
 // const store = createStore(cafeReducer)
