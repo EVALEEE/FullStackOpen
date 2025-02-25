@@ -1,6 +1,8 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Button from './Button'
+import { setCounts, setSelected } from '../reducers/cafeReducer'
+
 
 const AnecdoteList = () => {
     const anecdotes = [
@@ -11,24 +13,18 @@ const AnecdoteList = () => {
         'Premature optimization is the root of all evil.',
         'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
         'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients'
-      ]
+    ]
 
     const dispatch = useDispatch()
     const counts = useSelector(state => state.counts)
     const selected = useSelector(state => state.selected)
 
     const handleNextClick = () => {
-        dispatch({
-            type: 'SET_SELECTED',
-            index: Math.floor(Math.random() * anecdotes.length)
-        })
+        dispatch(setSelected(Math.floor(Math.random() * anecdotes.length)))
     }
 
     const handleVote = () => {
-        dispatch({
-            type: 'COUNTS',
-            index: selected
-        })
+        dispatch(setCounts(selected))
     }
 
     return (

@@ -13,7 +13,28 @@ import { configureStore } from '@reduxjs/toolkit'
 // =================  note app  =================
 // ReactDOM.createRoot(document.getElementById('root')).render(<App />)
 
-const store = configureStore({ reducer: noteReducer })
+//== ==
+
+// const store = configureStore({ reducer: noteReducer })
+// const root = ReactDOM.createRoot(document.getElementById('root'))
+
+// const renderApp = () => {
+//     root.render(
+//         <Provider store={store}>
+//             <App />
+//         </Provider>
+//     )
+// }
+
+// renderApp()
+// store.subscribe(renderApp)
+//应用现在被定义为由react redux库提供的Provider-组件的一个子组件
+// ReactDOM.createRoot(document.getElementById('root')).render(
+//     <Provider store={store}><App /></Provider>
+// )
+
+// =================  cafe app  =================
+const store = configureStore({ reducer: cafeReducer })
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 const renderApp = () => {
@@ -26,26 +47,6 @@ const renderApp = () => {
 
 renderApp()
 store.subscribe(renderApp)
-//应用现在被定义为由react redux库提供的Provider-组件的一个子组件
-// ReactDOM.createRoot(document.getElementById('root')).render(
-//     <Provider store={store}><App /></Provider>
-// )
-
-// =================  cafe app  =================
-// const store = createStore(cafeReducer)
-// const root = ReactDOM.createRoot(document.getElementById('root'))
-
-// const renderApp = () => {
-//     root.render(
-//         <Provider store={store}>
-//             <App/>
-//         </Provider>
-//         //wrapping it in a Provider component that passes the Redux store to the rest of the app
-//     )
-// }
-
-// renderApp() 
-// store.subscribe(renderApp)
 // to ensure that the application re-renders whenever the state in the Redux store changes.
 
 

@@ -69,13 +69,9 @@ const noteSlice = createSlice({
         },
         createNote: {
             reducer(state, action) {
-                console.log('action:', action)
                 state.push(action.payload)
-                console.log('state:', state)
             },
             prepare(content) {
-                console.log('content:', content.content)
-                console.log('id:',content.id)
                 return {
                     payload: {
                         content: content.content,
@@ -91,7 +87,6 @@ const noteSlice = createSlice({
         toggleImportance: (state, action) => {
             const id = action.payload
             const noteToChange = state.find(n => n.id === id)
-            console.log('noteToChange:', noteToChange)
             if (noteToChange) {
                 noteToChange.important = !noteToChange.important
             }
